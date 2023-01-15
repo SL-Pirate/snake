@@ -12,6 +12,8 @@ const char space = ' ';
 
 class Display{
     public:
+    Display();
+
     char screen[height][width];
 
     void draw();
