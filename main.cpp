@@ -1,29 +1,33 @@
 #include "main.hpp"
 
 int main(){
-    init();
+    Display *display = new Display();
+    draw(display);
+    display->draw();
 
     return 0;
 }
 
-void init(){
-    for (int i = 1; i <= width; i++){
-        std::cout << wall;
+void draw(Display *display){
+    //clear the literal screen
+    system("clear");
+
+    //the wall
+    for (int i = 0; i < width; i++){
+        display->screen[0][i] = wall;
+        display->screen[height - 1][i] = wall;
     }
-    std::cout << std::endl;
-    for (int i = 2; i <= height - 1; i++){
-        for (int i = 1; i <= width; i++){
-            if (i == 1 || i == width){
-                std::cout << wall;
+    for (int i = 1; i < height - 1; i++){
+        for (int j = 0; j < width; j++){
+            if (j == 0 || j == width - 1){
+                display->screen[i][j] = wall;
             }
             else{
-                std::cout << " ";
+                display->screen[i][j] = space;
             }
         }
-        std::cout << std::endl;
     }
-    for (int i = 1; i <= width; i++){
-        std::cout << wall;
-    }
-    std::cout << std::endl; 
+
+    //The start of the snake
+
 }
