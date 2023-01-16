@@ -21,12 +21,13 @@ const char space = ' ';
 
 class Display{
     public:
-    Display();
+//    Display();
 
     char screen[height][width];
 
     //only draws what's in the display array
     void draw(); 
+    void drawWall();
 };
 
 class Body{
@@ -45,6 +46,7 @@ class Body{
     Body(Display *display);
 
     void addToDisplay();
+    void moveSnake();
 };
 
 void draw(Display *display);

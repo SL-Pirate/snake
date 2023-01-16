@@ -1,6 +1,6 @@
 #include "main.hpp"
 
-Display::Display(){
+void Display::drawWall(){
     for (int i = 0; i < width; i++){
         screen[0][i] = wall;
         screen[height - 1][i] = wall;
@@ -29,9 +29,31 @@ void Display::draw(){
 Body::Body(Display *display){
     direction = right;
     this->display = display;
-    //head first
+
     snake[0][0] = 9; snake[0][1] = 29;
     snake[1][0] = 9; snake[1][1] = 30;
+
+    addToDisplay();
+}
+
+void Body::moveSnake(){
+    for (int i = length - 1; i >= 1; i--){
+        snake[i][0] = snake[i - 1][0];
+        snake[i][1] = snake[i - 1][1];
+    }
+    switch (direction){
+        case up:
+            snake[0][v]++;
+            break;
+        case down:
+            snake[0][v]--;
+            break;
+        case left:
+            snake[0][h]--;
+            break;
+        case right:
+            snake[0][h]++;
+    }
 
     addToDisplay();
 }
