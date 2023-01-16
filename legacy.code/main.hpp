@@ -5,7 +5,7 @@
 #include <chrono>
 
 #ifdef __linux__
-#include <unistd.h>
+#include <curses.h>
 #endif
 #ifdef _WIN32
 #include <windows.h>
@@ -52,3 +52,4 @@ class Body{
 void draw(Display *display);
 
 void mainloop(Body *body);
+void keyboardInput(Body *body);
