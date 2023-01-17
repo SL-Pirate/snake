@@ -1,4 +1,6 @@
 #include "main.hpp"
+#include "sdl_window.hpp"
+#include "snake.hpp"
 
 Window::Window(const char *title, int h, int w){
     win = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w ,h, SDL_WINDOW_SHOWN);
@@ -19,13 +21,28 @@ Window::~Window(){
     SDL_DestroyWindow(win);
 }
 
-void Window::setBg(){
-    //Set colour of renderer
-    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
-
-    //Clear the screen to the set colour
+void Window::clearRen(){
     SDL_RenderClear(ren);
+}
 
-    //Show all the has been done behind the scenes
+void Window::display(){
     SDL_RenderPresent(ren);
+}
+
+void Window::render(SDL_Texture *texture){
+    SDL_RenderCopy(ren, texture, NULL, NULL);
+}
+
+void Window::render(GraphicItem *item){
+    SDL_RenderCopy(ren, item->texture, item->org, item->getDst());
+}
+
+SDL_Texture *Window::loadTexture(const char *filePath){
+    SDL_Texture *texture = IMG_LoadTexture(ren, filePath);
+
+    if (texture == nullptr){
+        std::cout << "Loading texture file " << filePath << " failed with Error: " << SDL_GetError() << std::endl;
+    }
+    
+    return texture;
 }
