@@ -1,17 +1,12 @@
 #include "snake.hpp"
-#include "main.hpp"
 
 Entity::Entity(){}
 
 Snake::Snake(Window *gameWin, GraphicItem ***arr){
     this->gameWin = gameWin;
     this->arr = arr;
-    if (debug == 1){
-        texture = gameWin->loadTexture(realp "res/gfx/body.png"); // res/gfx/body.png
-    }
-    else{
-        texture = gameWin->loadTexture("res/gfx/body.png");
-    }
+    texture = gameWin->loadTexture("res/gfx/body.png"); // res/gfx/body.png
+
     snake[0] = new GraphicItem(texture, (int) rows/2, (int) cols/2);
     snake[1] = new GraphicItem(texture, (int) rows/2 + 1, (int) cols/2);
     length = 2;
@@ -29,7 +24,6 @@ void Snake::move(){
     for (int i = length; i >= 1; i--){
         snake[i] = snake[i - 1];
     }
-    delete(snake[0]);
     switch (dir){
         case up:
             snake[0] = new GraphicItem(texture, snake[1]->getPos()[0], snake[1]->getPos()[1] - 1);

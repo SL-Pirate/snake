@@ -1,3 +1,4 @@
+#include "main.hpp"
 #include "sdl_window.hpp"
 #include "snake.hpp"
 
@@ -11,14 +12,8 @@ int main(int argc, char **argv){
 
     Window *gameWin = new Window("Snake", winWidth, winHeight);
 
-    SDL_Texture *background;
+    SDL_Texture *background = gameWin->loadTexture("res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
 
-    if (debug == 1){
-        gameWin->loadTexture(realp "res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
-    }
-    else{
-        gameWin->loadTexture("res/gfx/grass-pattern.jpg");
-    }
     // arr[rows][cols]
     //equates to arr[y][x]
     GraphicItem ***arr = new GraphicItem**[rows];

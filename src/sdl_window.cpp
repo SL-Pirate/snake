@@ -1,3 +1,4 @@
+#include "main.hpp"
 #include "sdl_window.hpp"
 #include "snake.hpp"
 
