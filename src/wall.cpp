@@ -1,11 +1,15 @@
-#include "main.hpp"
 #include "snake.hpp"
 #include "sdl_window.hpp"
 
 Wall::Wall(Window *gameWin, GraphicItem ***arr){
     this->gameWin = gameWin;
     this->arr = arr;
-    texture = gameWin->loadTexture("res/gfx/brick_wall23.png"); //res/gfx/brick_wall.png
+    if (debug == 1){
+        texture = gameWin->loadTexture(realp "res/gfx/brick_wall23.png"); //res/gfx/brick_wall.png
+    }
+    else{
+        texture = gameWin->loadTexture("res/gfx/brick_wall23.png"); //res/gfx/brick_wall.png
+    }
 
     for (int i = 0; i < cols; i++){
         arr[0][i] = new GraphicItem(texture, 0, i);

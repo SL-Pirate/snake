@@ -1,5 +1,7 @@
 #pragma once
 
+#include "main.hpp"
+
 class GraphicItem;
 
 class Window{

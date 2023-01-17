@@ -28,7 +28,7 @@ void GraphicItem::setPos(int x, int y){
 }
 
 int *GraphicItem::getPos(){
-    int *pos = new int[2];
+    pos = new int[2];
     pos[0] = x / dst.w;
     pos[1] = y / dst.h;
     return pos;
