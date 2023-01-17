@@ -1,12 +1,12 @@
-## Snake game in sdl, my own version
+# Snake game in sdl, my own version
 
-# build dependancies
+## build dependancies
 
 SDL2
 
 SDL2_image
 
-# compiling for linux
+## compiling for linux
 
 `mkdir build/linux`
 
