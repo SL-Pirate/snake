@@ -4,7 +4,7 @@
 #include "sdl_window.hpp"
 #include "graphic_handler.hpp"
 
-enum Dir{up, down, left, right};
+enum Dir{up, down, left, right, stop};
 
 class Entity{
     protected:
@@ -25,14 +25,13 @@ class Snake : public Entity {
     
     public:
     Snake(Window *gameWin, GraphicItem ***arr);
-    void addToArr();
-    void move();
-    void move(Dir direction);
+    bool addToArr();
+    bool move();
+    bool move(Dir direction);
 };
 
 
 class Wall : public Entity {
     public:
-    int c = 0;
     Wall(Window *gameWin, GraphicItem ***arr);
 };

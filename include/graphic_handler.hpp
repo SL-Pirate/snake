@@ -6,14 +6,16 @@ class GraphicItem{
     private:
     SDL_Rect dst;
     int x, y;
+    int *pos;
 
     public:
     SDL_Rect *org = nullptr;
     SDL_Texture *texture = nullptr;
+    ID id;
 
     GraphicItem();
-    GraphicItem(SDL_Texture *texture, int y, int x);
-    ~GraphicItem();
+    GraphicItem(SDL_Texture *texture, int y, int x, ID id);
+//    ~GraphicItem();
 
     SDL_Rect *getDst();
 

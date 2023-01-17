@@ -12,7 +12,7 @@ int main(int argc, char **argv){
 
     Window *gameWin = new Window("Snake", winWidth, winHeight);
 
-    SDL_Texture *background = gameWin->loadTexture("res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
+    SDL_Texture *background = gameWin->loadTexture("/home/slpirate/Commons/programming/C++/snake/res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
 
     // arr[rows][cols]
     //equates to arr[y][x]
@@ -26,9 +26,16 @@ int main(int argc, char **argv){
 
     bool gameRunning = true;
     bool isKeyPressed = false;
+    bool isPaused = false;
 
     SDL_Event evnt;
     Dir dir;
+
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            arr[i][j] = nullptr;
+        }
+    }
 
     while(gameRunning) {
         while (SDL_PollEvent(&evnt)){
@@ -52,6 +59,10 @@ int main(int argc, char **argv){
                     case SDLK_RIGHT:
                         isKeyPressed = true;
                         dir = right;
+                        break;
+                    case SDLK_ESCAPE:
+                        isKeyPressed = true;
+                        isPaused = (isPaused) ? false : true;
                 }
             }
         }
@@ -60,6 +71,11 @@ int main(int argc, char **argv){
         //cleaning the arr
         for (int i = 0; i < rows; i++){
             for (int j = 0; j < cols; j++){
+                if (arr[i][j] != nullptr){
+                    if(arr[i][j]->id == WALL){
+                        delete(arr[i][j]);
+                    }
+                }
                 arr[i][j] = nullptr;
             }
         }
@@ -69,11 +85,13 @@ int main(int argc, char **argv){
 
         //move the snake
         if (isKeyPressed){
-            snake.move(dir);
-            isKeyPressed = false;
+            if (!isPaused){
+                gameRunning = snake.move(dir);
+                isKeyPressed = false;
+            }
         }
         else{
-            snake.move();
+            gameRunning = snake.move();
         }
 
         //displaying everything on screen
