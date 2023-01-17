@@ -35,3 +35,14 @@ class Wall : public Entity {
     public:
     Wall(Window *gameWin, GraphicItem ***arr);
 };
+
+
+class Food : public Entity {
+    int cords[2];
+    void genCords();
+
+    public:
+    Food(Window *gameWin, GraphicItem ***arr);
+    void genFood();
+    void refresh();
+};

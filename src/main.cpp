@@ -12,7 +12,7 @@ int main(int argc, char **argv){
 
     Window *gameWin = new Window("Snake", winWidth, winHeight);
 
-    SDL_Texture *background = gameWin->loadTexture("/home/slpirate/Commons/programming/C++/snake/res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
+    SDL_Texture *background = gameWin->loadTexture(realP "res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
 
     // arr[rows][cols]
     //equates to arr[y][x]
@@ -20,9 +20,6 @@ int main(int argc, char **argv){
     for (int i = 0; i < rows; i++){
         arr[i] = new GraphicItem*[cols];
     }
-
-    //implementing snake
-    Snake snake = Snake(gameWin, arr);
 
     bool gameRunning = true;
     bool isKeyPressed = false;
@@ -37,12 +34,19 @@ int main(int argc, char **argv){
         }
     }
 
+    Wall wall = Wall(gameWin, arr);
+
+    //implementing snake & food
+    Snake snake = Snake(gameWin, arr);
+    Food food1 = Food(gameWin, arr);
+    Food food2 = Food(gameWin, arr);
+
     while(gameRunning) {
         while (SDL_PollEvent(&evnt)){
             if (evnt.type == SDL_QUIT){
                 gameRunning = false;
             }
-            if (evnt.type == SDL_KEYDOWN){
+            else if (evnt.type == SDL_KEYDOWN){
                 switch(evnt.key.keysym.sym){
                     case SDLK_UP:
                         isKeyPressed = true;
@@ -63,6 +67,9 @@ int main(int argc, char **argv){
                     case SDLK_ESCAPE:
                         isKeyPressed = true;
                         isPaused = (isPaused) ? false : true;
+                        break;
+                    case SDLK_q:
+                        gameRunning = false;
                 }
             }
         }
@@ -86,13 +93,21 @@ int main(int argc, char **argv){
         //move the snake
         if (isKeyPressed){
             if (!isPaused){
-                gameRunning = snake.move(dir);
+                if(!snake.move(dir)){
+                    gameRunning = false;
+                }
                 isKeyPressed = false;
             }
         }
         else{
-            gameRunning = snake.move();
+            if(!snake.move()){
+                gameRunning = false;
+            }
         }
+    
+        //refresh food
+        food1.refresh();
+        food2.refresh();
 
         //displaying everything on screen
         gameWin->render(background);
