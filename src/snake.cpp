@@ -5,7 +5,7 @@ Entity::Entity(){}
 Snake::Snake(Window *gameWin, GraphicItem ***arr){
     this->gameWin = gameWin;
     this->arr = arr;
-    texture = gameWin->loadTexture("/home/slpirate/Commons/programming/C++/snake/res/gfx/body.png"); // res/gfx/body.png
+    texture = gameWin->loadTexture("res/gfx/body.png"); // res/gfx/body.png
 
     snake[0] = new GraphicItem(texture, (int) rows/2, (int) cols/2);
     snake[1] = new GraphicItem(texture, (int) rows/2 + 1, (int) cols/2);

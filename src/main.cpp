@@ -12,7 +12,7 @@ int main(int argc, char **argv){
 
     Window *gameWin = new Window("Snake", winWidth, winHeight);
 
-    SDL_Texture *background = gameWin->loadTexture("/home/slpirate/Commons/programming/C++/snake/res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
+    SDL_Texture *background = gameWin->loadTexture("res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
 
     // arr[rows][cols]
     //equates to arr[y][x]
