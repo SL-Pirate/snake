@@ -19,3 +19,7 @@ Wall::Wall(Window *gameWin, GraphicItem ***arr){
         }
     }
 }
+
+void Wall::clearItem(){
+    item = nullptr;
+}

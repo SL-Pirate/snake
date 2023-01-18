@@ -11,14 +11,16 @@ Food::Food(Window *gameWin, GraphicItem ***arr){
 }
 
 void Food::genFood(){
-    genCords();
-    if (arr[cords[0]][cords[1]] == nullptr){
-        refresh();
+    if(item == nullptr){
+        genCords();
+        if (arr[cords[0]][cords[1]] == nullptr){
+            item = new GraphicItem(texture, cords[0], cords[1], FOOD, this);
+            arr[cords[0]][cords[1]] = item;
+        }
+        else{
+            genFood();
+        }
     }
-    else{
-        genFood();
-    }
-
 }
 
 void Food::genCords(){
@@ -26,6 +28,7 @@ void Food::genCords(){
     cords[1] = random() % rows;
 }
 
-void Food::refresh(){
-    arr[cords[0]][cords[1]] = new GraphicItem(texture, cords[0], cords[1], FOOD);
+void Food::clearItem(){
+    item = nullptr;
+    std::cout << "cleared: " << item << std::endl;
 }

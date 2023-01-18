@@ -16,7 +16,15 @@
 #define texHeight 16
 #define rows 608 / 16 //resolves to number y
 #define cols 608 / 16 //resolves to number x
+
+//debug
+#define DEBUG
+
+#ifdef DEBUG
 #define realP "/home/slpirate/Commons/programming/C++/snake/"
+#else
+#define realP ""
+#endif
 
 //globals vars
 enum ID{WALL, SNAKE, FOOD};

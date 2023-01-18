@@ -1,6 +1,6 @@
 #pragma once
 
-#include "main.hpp"
+class Entity;
 
 class GraphicItem{
     private:
@@ -12,9 +12,11 @@ class GraphicItem{
     SDL_Rect *org = nullptr;
     SDL_Texture *texture = nullptr;
     ID id;
+    Entity *parent = nullptr;
 
     GraphicItem();
     GraphicItem(SDL_Texture *texture, int y, int x, ID id);
+    GraphicItem(SDL_Texture *texture, int y, int x, ID id, Entity *parent);
 //    ~GraphicItem();
 
     SDL_Rect *getDst();
@@ -38,4 +40,7 @@ class GraphicItem{
     divided by size of the graphic item
     */
     int *getPos();
+
+    //risky
+
 };

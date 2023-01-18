@@ -24,6 +24,7 @@ int main(int argc, char **argv){
     bool gameRunning = true;
     bool isKeyPressed = false;
     bool isPaused = false;
+    const int numFoodItems = 3;
 
     SDL_Event evnt;
     Dir dir;
@@ -38,8 +39,10 @@ int main(int argc, char **argv){
 
     //implementing snake & food
     Snake snake = Snake(gameWin, arr);
-    Food food1 = Food(gameWin, arr);
-    Food food2 = Food(gameWin, arr);
+    Food *foods[numFoodItems];
+    for (int i = 0; i < numFoodItems; i++){
+        foods[i] = new Food(gameWin, arr);
+    }
 
     while(gameRunning) {
         while (SDL_PollEvent(&evnt)){
@@ -75,22 +78,23 @@ int main(int argc, char **argv){
         }
         gameWin->clearRen();
 
-        //cleaning the arr
-        for (int i = 0; i < rows; i++){
-            for (int j = 0; j < cols; j++){
-                if (arr[i][j] != nullptr){
-                    if(arr[i][j]->id == WALL){
-                        delete(arr[i][j]);
-                    }
-                }
-                arr[i][j] = nullptr;
-            }
-        }
+        // //cleaning the arr
+        // for (int i = 0; i < rows; i++){
+        //     for (int j = 0; j < cols; j++){
+        //         if (arr[i][j] != nullptr){
+        //             if(arr[i][j]->id == WALL){
+        //                 delete(arr[i][j]);
+        //             }
+        //         }
+        //         arr[i][j] = nullptr;
+        //     }
+        // }
 
-        //poppulating the array w/ walls
-        Wall wall = Wall(gameWin, arr);
+        // //poppulating the array w/ walls
+        // Wall wall = Wall(gameWin, arr);
 
         //move the snake
+        //TODO: fix recursion
         if (isKeyPressed){
             if (!isPaused){
                 if(!snake.move(dir)){
@@ -106,8 +110,9 @@ int main(int argc, char **argv){
         }
     
         //refresh food
-        food1.refresh();
-        food2.refresh();
+        for (int i = 0; i < numFoodItems; i++){
+            foods[i]->genFood();
+        }
 
         //displaying everything on screen
         gameWin->render(background);
@@ -120,7 +125,7 @@ int main(int argc, char **argv){
             }
         }
         gameWin->display();
-        std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        std::this_thread::sleep_for(std::chrono::milliseconds(150));
     }
 
     delete(gameWin);

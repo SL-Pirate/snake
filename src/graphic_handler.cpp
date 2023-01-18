@@ -1,9 +1,27 @@
-#include "graphic_handler.hpp"
-#include "main.hpp"
+#include "snake.hpp"
 
 GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id){
     this->texture = texture;
     this->id = id;
+
+    org = new SDL_Rect();
+    org->h = 16;
+    org->w = 16;
+    org->x = 0;
+    org->y = 0;
+
+    dst.w = 16;
+    dst.h = 16;
+    dst.x = x * dst.w;
+    dst.y = y * dst.h;
+
+    setPos(x, y);
+}
+
+GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id, Entity *parent){
+    this->texture = texture;
+    this->id = id;
+    this->parent = parent;
 
     org = new SDL_Rect();
     org->h = 16;

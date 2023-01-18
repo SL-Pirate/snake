@@ -12,23 +12,45 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr){
     length = 2;
 }
 
-bool Snake::addToArr(){
-    //collision detection
-    if (arr[snake[0]->getPos()[0]][snake[0]->getPos()[1]] != nullptr){
-        if(arr[snake[0]->getPos()[0]][snake[0]->getPos()[1]]->id == WALL || arr[snake[0]->getPos()[0]][snake[0]->getPos()[1]]->id == SNAKE){
-            return false;
-        }
+void Snake::addToArr(){
+    for (int i = 0; i < length; i++){
+        arr[snake[i]->getPos()[0]][snake[i]->getPos()[1]] = snake[i];
     }
-    else{
-        for (int i = 0; i < length; i++){
-            arr[snake[i]->getPos()[0]][snake[i]->getPos()[1]] = snake[i];
-        }
-    }
-    return true;
 }
 
 bool Snake::move(){
-    for (int i = length; i >= 1; i--){
+    //deleting the last square where the snake's tail was last in
+    arr[snake[length - 1]->getPos()[0]][snake[length - 1]->getPos()[1]] = nullptr;
+
+    //collision detection
+    GraphicItem *nextItem = nullptr;
+    switch (dir){
+        case up:
+            nextItem = arr[snake[0]->getPos()[0]][snake[0]->getPos()[1] - 1];
+            break;
+        case down:
+            nextItem = arr[snake[0]->getPos()[0]][snake[0]->getPos()[1] + 1];
+            break;
+        case left:
+            nextItem = arr[snake[0]->getPos()[0] - 1][snake[0]->getPos()[1]];
+            break;
+        case right:
+            nextItem = arr[snake[0]->getPos()[0] + 1][snake[0]->getPos()[1]];
+    }
+    if (nextItem != nullptr){
+        if(nextItem->id == WALL || nextItem->id == SNAKE){
+            return false;
+        }
+        else if(nextItem->id == FOOD){
+            ate(nextItem);
+        }
+    }
+    else{
+        delete(snake[length - 1]);
+        snake[length - 1] = nullptr;
+    }
+
+    for (int i = length - 1; i >= 1; i--){
         snake[i] = snake[i - 1];
     }
     switch (dir){
@@ -45,7 +67,9 @@ bool Snake::move(){
             snake[0] = new GraphicItem(texture, snake[1]->getPos()[0] + 1, snake[1]->getPos()[1], SNAKE);
     }
 
-    return addToArr();
+    addToArr();
+
+    return true;
 }
 
 bool Snake::move(Dir direction){
@@ -63,4 +87,21 @@ bool Snake::move(Dir direction){
     }
 
     return move();
+}
+
+void Snake::ate(GraphicItem *nextItem){
+    length++;
+    score++;
+
+    //delete the food item
+    arr[nextItem->getPos()[0]][nextItem->getPos()[1]]->parent->clearItem();
+    delete(arr[nextItem->getPos()[0]][nextItem->getPos()[1]]);
+
+    //output the score
+    system("clear");
+    std::cout << "Your score: " << score << std::endl;
+}
+
+void Snake::clearItem(){
+    item = nullptr;
 }
