@@ -9,3 +9,6 @@
 
 #TODO NOTES
 TODO
+
+#Appimage build
+/build_configs/linux/appimage/snake-x86_64.AppImage
