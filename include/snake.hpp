@@ -16,7 +16,7 @@ class Entity{
     Window *gameWin = nullptr;
     SDL_Texture *texture = nullptr;
     //GraphicItem *arr[rows][cols];
-    GraphicItem ***arr;
+    GraphicItem ***arr = nullptr;
     //used for passing food entities to set them to null so food can be regenerated if eaten
     GraphicItem *item = nullptr;
     

@@ -5,7 +5,7 @@ class Entity;
 class GraphicItem{
     private:
     int x, y;
-    int *pos;
+    int *pos = nullptr;
     Entity *parent = nullptr;
 
     public:

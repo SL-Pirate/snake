@@ -78,23 +78,7 @@ int main(int argc, char **argv){
         }
         gameWin->clearRen();
 
-        // //cleaning the arr
-        // for (int i = 0; i < rows; i++){
-        //     for (int j = 0; j < cols; j++){
-        //         if (arr[i][j] != nullptr){
-        //             if(arr[i][j]->id == WALL){
-        //                 delete(arr[i][j]);
-        //             }
-        //         }
-        //         arr[i][j] = nullptr;
-        //     }
-        // }
-
-        // //poppulating the array w/ walls
-        // Wall wall = Wall(gameWin, arr);
-
         //move the snake
-        //TODO: fix recursion
         if (isKeyPressed){
             if (!isPaused){
                 if(!snake.move(dir)){
