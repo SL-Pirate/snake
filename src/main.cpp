@@ -9,8 +9,11 @@ int main(int argc, char **argv){
     if (!IMG_Init(IMG_INIT_PNG)){
         std::cout << "SDL_IMG INIT FAILED! Error: " << SDL_GetError() << std::endl;
     }
+    if (TTF_Init() == -1){
+        std::cout << "TTF INIT FAILED! Error: " << TTF_GetError() << std::endl;
+    }
 
-    Window *gameWin = new Window("Snake", winHeight, winWidth);
+    Window *gameWin = new Window("Snake", winHeight + 44, winWidth);
 
     SDL_Texture *background = gameWin->loadTexture(realP "res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
 
@@ -100,7 +103,7 @@ int main(int argc, char **argv){
 
         //displaying everything on screen
         gameWin->render(background);
-
+        gameWin->render((snake.font->getItem()));
         for (int i = 0; i < rows; i++){
             for (int j = 0; j < cols; j++){
                 if (arr[i][j] != nullptr){
@@ -108,9 +111,14 @@ int main(int argc, char **argv){
                 }
             }
         }
+
         gameWin->display();
         std::this_thread::sleep_for(std::chrono::milliseconds(150));
     }
+
+    //game over
+    system("clear");
+    std::cout << "Game Over\nYour Score: " << snake.getScore() << std::endl;
 
     //freeying memory
     delete(gameWin);
@@ -131,6 +139,7 @@ int main(int argc, char **argv){
         foods[i] = nullptr;
     }
 
+    TTF_Quit;
     SDL_Quit;
 
     return 0;
