@@ -17,7 +17,6 @@ class GraphicItem{
     GraphicItem();
     GraphicItem(SDL_Texture *texture, int y, int x, ID id);
     GraphicItem(SDL_Texture *texture, int y, int x, ID id, Entity *parent);
-    GraphicItem(SDL_Texture *texture, SDL_Rect *dst);
     ~GraphicItem();
 
     /**takes positions of x and y in "In Game Units*" 

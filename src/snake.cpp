@@ -20,9 +20,6 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr){
     snake[0] = new GraphicItem(texture, (int) rows/2, (int) cols/2, SNAKE);
     snake[1] = new GraphicItem(texture, (int) rows/2 + 1, (int) cols/2, SNAKE);
     length = 2;
-
-    //display scores
-    font = new Fonts(gameWin, "SCORE: " + std::to_string(score));
 }
 
 void Snake::addToArr(){
@@ -111,15 +108,10 @@ void Snake::ate(GraphicItem *nextItem){
     delete(arr[nextItem->getPos()[0]][nextItem->getPos()[1]]);
 
     //output the score
-    font->setTitle("SCORE: " + std::to_string(score));
     system("clear");
     std::cout << "Your score: " << score << std::endl;
 }
 
 void Snake::clearItem(){
     item = nullptr;
-}
-
-int Snake::getScore(){
-    return score;
 }

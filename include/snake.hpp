@@ -32,21 +32,6 @@ class Entity{
 };
 
 
-//definition of the class Fonts, child of entity
-class Fonts : public Entity {
-    TTF_Font *font = nullptr;
-    SDL_Rect *dst = nullptr;
-    std::string title;
-
-    public:
-    Fonts(Window *gameWin, std::string title);
-    
-    void setTitle(std::string title);
-    void clearItem();
-    GraphicItem *getItem();
-};
-
-
 //definition of the class Snake, child of entity
 class Snake : public Entity {
     GraphicItem *snake[rows*cols];
@@ -63,9 +48,6 @@ class Snake : public Entity {
     void addToArr();
     bool move();
     bool move(Dir direction);
-    int getScore();
-
-    Fonts *font = nullptr;
 };
 
 
