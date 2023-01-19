@@ -12,3 +12,4 @@ TODO
 
 #Appimage build
 /build_configs/linux/appimage/snake-x86_64.AppImage
+/build_configs/linux/appimage/snake.AppDir/usr/bin/snake
