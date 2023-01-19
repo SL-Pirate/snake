@@ -10,12 +10,12 @@
 #include <time.h>
 
 //marcos
-#define winWidth 608
-#define winHeight 608
+#define winWidth 496
+#define winHeight 496
 #define texWidth 16
 #define texHeight 16
-#define rows 608 / 16 //resolves to number y
-#define cols 608 / 16 //resolves to number x
+#define rows winHeight / 16 //resolves to number y
+#define cols winWidth / 16 //resolves to number x
 
 #ifdef DEBUG
 #define realP "/home/slpirate/Commons/programming/C++/snake/"

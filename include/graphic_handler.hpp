@@ -4,22 +4,20 @@ class Entity;
 
 class GraphicItem{
     private:
-    SDL_Rect dst;
     int x, y;
     int *pos;
+    Entity *parent = nullptr;
 
     public:
     SDL_Rect *org = nullptr;
+    SDL_Rect *dst = nullptr;
     SDL_Texture *texture = nullptr;
     ID id;
-    Entity *parent = nullptr;
 
     GraphicItem();
     GraphicItem(SDL_Texture *texture, int y, int x, ID id);
     GraphicItem(SDL_Texture *texture, int y, int x, ID id, Entity *parent);
-//    ~GraphicItem();
-
-    SDL_Rect *getDst();
+    ~GraphicItem();
 
     /**takes positions of x and y in "In Game Units*" 
     
@@ -41,6 +39,6 @@ class GraphicItem{
     */
     int *getPos();
 
-    //risky
-
+    //remove the item from the parent class by setting it to null
+    void rmFromParent();
 };

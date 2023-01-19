@@ -10,7 +10,7 @@ int main(int argc, char **argv){
         std::cout << "SDL_IMG INIT FAILED! Error: " << SDL_GetError() << std::endl;
     }
 
-    Window *gameWin = new Window("Snake", winWidth, winHeight);
+    Window *gameWin = new Window("Snake", winHeight, winWidth);
 
     SDL_Texture *background = gameWin->loadTexture(realP "res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
 
@@ -128,8 +128,25 @@ int main(int argc, char **argv){
         std::this_thread::sleep_for(std::chrono::milliseconds(150));
     }
 
+    //freeying memory
     delete(gameWin);
     gameWin = nullptr;
+    SDL_DestroyTexture(background);
+    background = nullptr;
+    //DO NOT free graphic items from anywhere else since they will be already freed from here
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            delete(arr[i][j]);
+        }
+       delete(arr[i]);
+    }
+   delete (arr);
+    arr = nullptr;
+    for (int i = 0; i < numFoodItems; i++){
+        delete (foods[i]);
+        foods[i] = nullptr;
+    }
+
     SDL_Quit;
 
     return 0;

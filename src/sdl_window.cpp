@@ -34,7 +34,7 @@ void Window::render(SDL_Texture *texture){
 }
 
 void Window::render(GraphicItem *item){
-    SDL_RenderCopy(ren, item->texture, item->org, item->getDst());
+    SDL_RenderCopy(ren, item->texture, item->org, item->dst);
 }
 
 SDL_Texture *Window::loadTexture(const char *filePath){

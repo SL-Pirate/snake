@@ -30,5 +30,4 @@ void Food::genCords(){
 
 void Food::clearItem(){
     item = nullptr;
-    std::cout << "cleared: " << item << std::endl;
 }

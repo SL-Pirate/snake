@@ -1,11 +1,21 @@
 #include "snake.hpp"
 
+
+//Definition of class "Entity" 
+//which is the parent class for all entities snke, wall and food
 Entity::Entity(){}
 
+Entity::~Entity(){
+    SDL_DestroyTexture(texture);
+    texture = nullptr;
+}
+
+
+//definition of the actual "Snake" class
 Snake::Snake(Window *gameWin, GraphicItem ***arr){
     this->gameWin = gameWin;
     this->arr = arr;
-    texture = gameWin->loadTexture("/home/slpirate/Commons/programming/C++/snake/res/gfx/body.png"); // res/gfx/body.png
+    texture = gameWin->loadTexture(realP "res/gfx/body.png"); // res/gfx/body.png
 
     snake[0] = new GraphicItem(texture, (int) rows/2, (int) cols/2, SNAKE);
     snake[1] = new GraphicItem(texture, (int) rows/2 + 1, (int) cols/2, SNAKE);
@@ -94,7 +104,7 @@ void Snake::ate(GraphicItem *nextItem){
     score++;
 
     //delete the food item
-    arr[nextItem->getPos()[0]][nextItem->getPos()[1]]->parent->clearItem();
+    arr[nextItem->getPos()[0]][nextItem->getPos()[1]]->rmFromParent();
     delete(arr[nextItem->getPos()[0]][nextItem->getPos()[1]]);
 
     //output the score
