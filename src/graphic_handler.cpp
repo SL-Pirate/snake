@@ -39,6 +39,12 @@ GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id, Entity *pare
     setPos(x, y);
 }
 
+GraphicItem::GraphicItem(SDL_Texture *texture, SDL_Rect *dst){
+    this->texture = texture;
+
+    this->dst = dst;
+}
+
 GraphicItem::~GraphicItem(){
     delete (pos);
     delete (org);
