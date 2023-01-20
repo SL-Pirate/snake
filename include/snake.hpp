@@ -5,17 +5,12 @@
 #include "graphic_handler.hpp"
 
 
-//enums required to determine the direction of the movement of the snake
-//"stop" is only a placeholder
-enum Dir{up, down, left, right, stop};
-
-
 //parent class for all entities snake, wall and food
 class Entity{
     protected:
     Window *gameWin = nullptr;
     SDL_Texture *texture = nullptr;
-    //GraphicItem *arr[rows][cols];
+    //GraphicItem *arr[ROWS][COLS];
     GraphicItem ***arr = nullptr;
     //used for passing food entities to set them to null so food can be regenerated if eaten
     GraphicItem *item = nullptr;
@@ -50,16 +45,17 @@ class Fonts : public Entity {
 
 //definition of the class Snake, child of entity
 class Snake : public Entity {
-    GraphicItem *snake[rows*cols];
+    GraphicItem *snake[ROWS*COLS];
     int length = 0;
     Dir dir = right;
     int score = 0;
+    int scoreMultiplier = 1;
 
     void ate(GraphicItem *nextItem);
     void clearItem();
     
     public:
-    Snake(Window *gameWin, GraphicItem ***arr);
+    Snake(Window *gameWin, GraphicItem ***arr, int scoreMultiplier);
     ~Snake();
 
     void addToArr();

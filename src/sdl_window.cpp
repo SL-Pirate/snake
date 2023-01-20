@@ -6,13 +6,13 @@ Window::Window(const char *title, int h, int w){
     win = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w ,h, SDL_WINDOW_SHOWN);
 
     if (win == nullptr){
-        std::cout << "Window initialization failed! \nError: " << SDL_GetError() << std::endl;
+        // std::cout << "Window initialization failed! \nError: " << SDL_GetError() << std::endl;
     }
 
     ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
     if (ren == nullptr){
-        std::cout << "Renderer initialization failed! \nError: " << SDL_GetError() << std::endl;
+        // std::cout << "Renderer initialization failed! \nError: " << SDL_GetError() << std::endl;
     }
 }
 
@@ -41,7 +41,7 @@ SDL_Texture *Window::loadTexture(const char *filePath){
     SDL_Texture *texture = IMG_LoadTexture(ren, filePath);
 
     if (texture == nullptr){
-        std::cout << "Loading texture file " << filePath << " failed with Error: " << SDL_GetError() << std::endl;
+        // std::cout << "Loading texture file " << filePath << " failed with Error: " << SDL_GetError() << std::endl;
     }
     
     return texture;
