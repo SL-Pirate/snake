@@ -60,6 +60,7 @@ class Snake : public Entity {
     
     public:
     Snake(Window *gameWin, GraphicItem ***arr);
+    ~Snake();
 
     void addToArr();
     bool move();

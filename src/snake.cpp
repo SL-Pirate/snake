@@ -31,6 +31,10 @@ void Snake::addToArr(){
     }
 }
 
+Snake::~Snake(){
+    delete(font);
+}
+
 bool Snake::move(){
     //deleting the last square where the snake's tail was last in
     arr[snake[length - 1]->getPos()[0]][snake[length - 1]->getPos()[1]] = nullptr;
