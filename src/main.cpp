@@ -2,7 +2,7 @@
 #include "sdl_window.hpp"
 #include "snake.hpp"
 
-int WinMain(int argc, char **argv){
+int main(int argc, char **argv){
     if (SDL_Init(SDL_INIT_VIDEO) < 0){
         std::cout << "Error: SDL INIT VIDEO FAILED!" << SDL_GetError() << std::endl;
     }
