@@ -24,8 +24,8 @@ void Food::genFood(){
 }
 
 void Food::genCords(){
-    cords[0] = random() % cols;
-    cords[1] = random() % rows;
+    cords[0] = rand() % cols;
+    cords[1] = rand() % rows;
 }
 
 void Food::clearItem(){

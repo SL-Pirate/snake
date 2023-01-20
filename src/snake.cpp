@@ -112,8 +112,6 @@ void Snake::ate(GraphicItem *nextItem){
 
     //output the score
     font->setTitle("SCORE: " + std::to_string(score));
-    system("clear");
-    std::cout << "Your score: " << score << std::endl;
 }
 
 void Snake::clearItem(){

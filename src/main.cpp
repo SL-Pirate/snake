@@ -2,7 +2,7 @@
 #include "sdl_window.hpp"
 #include "snake.hpp"
 
-int main(int argc, char **argv){
+int WinMain(int argc, char **argv){
     if (SDL_Init(SDL_INIT_VIDEO) < 0){
         std::cout << "Error: SDL INIT VIDEO FAILED!" << SDL_GetError() << std::endl;
     }
@@ -117,7 +117,6 @@ int main(int argc, char **argv){
     }
 
     //game over
-    system("clear");
     std::cout << "Game Over\nYour Score: " << snake.getScore() << std::endl;
 
     //freeying memory
@@ -141,6 +140,8 @@ int main(int argc, char **argv){
 
     TTF_Quit;
     SDL_Quit;
+
+    system("Pause");
 
     return 0;
 }

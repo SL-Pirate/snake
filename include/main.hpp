@@ -1,5 +1,29 @@
 #pragma once
 
+
+//marcos
+#define SDL_MAIN_HANDLED
+
+#define winWidth 496
+#define winHeight 496
+#define texWidth 16
+#define texHeight 16
+#define rows winHeight / 16 //resolves to number y
+#define cols winWidth / 16 //resolves to number x
+
+#if defined(DEBUG)
+#define realP "/home/slpirate/Commons/programming/C++/snake/"
+#elif defined(DEBUG_LINUX)
+#define realP "F:\\programming\\c++\\snake\\"
+#else
+#define realP ""
+#endif
+
+#ifdef Win32
+#include <windows.h>
+#endif
+
+
 //for debugging purposes
 #include <iostream>
 #include <SDL2/SDL.h>
@@ -10,19 +34,6 @@
 #include <random>
 #include <time.h>
 
-//marcos
-#define winWidth 496
-#define winHeight 496
-#define texWidth 16
-#define texHeight 16
-#define rows winHeight / 16 //resolves to number y
-#define cols winWidth / 16 //resolves to number x
-
-#ifdef DEBUG
-#define realP "/home/slpirate/Commons/programming/C++/snake/"
-#else
-#define realP ""
-#endif
 
 //globals vars
 enum ID{WALL, SNAKE, FOOD};
