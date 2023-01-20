@@ -19,10 +19,6 @@
 #define realP ""
 #endif
 
-#ifdef Win32
-#include <windows.h>
-#endif
-
 
 //for debugging purposes
 #include <iostream>

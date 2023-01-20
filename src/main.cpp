@@ -141,7 +141,9 @@ int main(int argc, char **argv){
     TTF_Quit;
     SDL_Quit;
 
+    #ifdef _WIN32
     system("Pause");
+    #endif
 
     return 0;
 }
