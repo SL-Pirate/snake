@@ -40,6 +40,7 @@ class Fonts : public Entity {
 
     public:
     Fonts(Window *gameWin, std::string title);
+    ~Fonts();
     
     void setTitle(std::string title);
     void clearItem();

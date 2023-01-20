@@ -17,6 +17,11 @@ Fonts::Fonts(Window *gameWin, std::string title){
     setTitle(title);
 }
 
+Fonts::~Fonts(){
+    delete(font);
+    delete(dst);
+}
+
 void Fonts::setTitle(std::string title){
     this->title = title;
 
