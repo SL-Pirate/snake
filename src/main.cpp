@@ -60,7 +60,7 @@ void cMain::quit(){
     outLabel = "Your Score: ";
     outLabel << game->snake->getScore();
     out->SetLabel(outLabel);
-    this->btn->SetName("Restart");
+    this->btn->SetLabel("Restart");
     this->btn1->Hide();
     this->btn->Show();
     this->Show();
