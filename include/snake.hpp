@@ -49,13 +49,13 @@ class Snake : public Entity {
     int length = 0;
     Dir dir = right;
     int score = 0;
-    int scoreMultiplier = 1;
+    wxSlider *difficulty = nullptr;
 
     void ate(GraphicItem *nextItem);
     void clearItem();
     
     public:
-    Snake(Window *gameWin, GraphicItem ***arr, int scoreMultiplier);
+    Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty);
     ~Snake();
 
     void addToArr();

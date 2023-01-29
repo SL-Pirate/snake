@@ -12,7 +12,10 @@ Game::Game(cMain *parent){
     if (TTF_Init() == -1){
         // std::cout << "TTF INIT FAILED! Error: " << TTF_GetError() << std::endl;
     }
+    this->parent = parent;
+}
 
+void Game::start(){
     gameWin = new Window("Snake", winHeight + 44, winWidth);
 
     background = gameWin->loadTexture(realP "res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
@@ -33,7 +36,7 @@ Game::Game(cMain *parent){
     wall = new Wall(gameWin, arr);
 
     //implementing snake & food
-    snake = new Snake(gameWin, arr, 1000/parent->difficulty->GetValue());
+    snake = new Snake(gameWin, arr, parent->difficulty/*1000/parent->difficulty->GetValue()*/);
     for (int i = 0; i < numFoodItems; i++){
         foods[i] = new Food(gameWin, arr);
     }
@@ -63,7 +66,7 @@ Game::Game(cMain *parent){
                         break;
                     case SDLK_ESCAPE:
                         isKeyPressed = true;
-                        isPaused = (isPaused) ? false : true;
+                        isPaused = true;
                         parent->pause();
                         break;
                     case SDLK_q:
@@ -72,6 +75,7 @@ Game::Game(cMain *parent){
                 }
             }
         }
+
         gameWin->clearRen();
 
         //move the snake

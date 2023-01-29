@@ -21,10 +21,20 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Snake " VERSION, wxPoint(250, 50), 
     out = new wxStaticText(this, wxID_ANY, outLabel, wxPoint(50, 290), wxSize(300, 140));
     out->Hide();
 }
-
+cMain::~cMain(){
+    delete(difficulty);
+    delete(game);
+    delete(btn);
+    delete(btn1);
+    delete(txt);
+    delete(out);
+    delete(in);
+    delete(t);
+}
 void cMain::start(wxCommandEvent &evt){
     this->Hide();
-    t = new std::thread(newGame, this);
+    game = new Game(this);
+    t = new std::thread(startGame);
 }
 void cMain::resume(wxCommandEvent &evt){
     this->Hide();
@@ -38,15 +48,18 @@ void cMain::pause(){
     btn->Hide();
     btn1->Show();
 }
-void cMain::newGame(cMain *parent){
-    parent->game = new Game(parent);
+void cMain::startGame(){
+    game->start();
 }
 void cMain::quit(){
     this->btn->SetName("Restart");
+    this->btn1->Hide();
+    this->btn->Show();
     this->Show();
     game = nullptr;
     t = nullptr;
 }
+Game *cMain::game = nullptr;
 
 
 //Starting point of the program

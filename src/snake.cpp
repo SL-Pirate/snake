@@ -12,11 +12,11 @@ Entity::~Entity(){
 
 
 //definition of the actual "Snake" class
-Snake::Snake(Window *gameWin, GraphicItem ***arr, int scoreMultiplier){
+Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty){
     this->gameWin = gameWin;
     this->arr = arr;
     texture = gameWin->loadTexture(realP "res/gfx/body.png"); // res/gfx/body.png
-    this->scoreMultiplier = scoreMultiplier;
+    this->difficulty = difficulty;
 
     snake[0] = new GraphicItem(texture, (int) ROWS/2, (int) COLS/2, SNAKE);
     snake[1] = new GraphicItem(texture, (int) ROWS/2 + 1, (int) COLS/2, SNAKE);
@@ -109,7 +109,7 @@ bool Snake::move(Dir direction){
 
 void Snake::ate(GraphicItem *nextItem){
     length++;
-    score += scoreMultiplier;
+    score += 10 * difficulty->GetValue();
 
     //delete the food item
     arr[nextItem->getPos()[0]][nextItem->getPos()[1]]->rmFromParent();

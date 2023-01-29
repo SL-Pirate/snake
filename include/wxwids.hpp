@@ -7,9 +7,10 @@ class Game;
 class cMain : public wxFrame{
     public:
     cMain();
+    ~cMain();
 
     wxSlider *difficulty = nullptr;
-    Game *game = nullptr;
+    static Game *game;
 
     void pause();
     void quit();
@@ -27,7 +28,7 @@ class cMain : public wxFrame{
     void onClose(wxCloseEvent &evt);
     void restart(wxCommandEvent &evt);
     void resume(wxCommandEvent &evt);
-    static void newGame(cMain *parent);
+    static void startGame();
 
     wxDECLARE_EVENT_TABLE();
 };

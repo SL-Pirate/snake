@@ -23,10 +23,13 @@ class Game{
     Food *foods[numFoodItems];
     Wall *wall = nullptr;
     Snake *snake = nullptr;
+    cMain *parent = nullptr;
 
     public:
     Game(cMain *parent);
     ~Game();
+
+    void start();
 
     void resume();
 };
