@@ -14,7 +14,7 @@ SDL2_ttf
 
 `cp res build/linux/`
 
-`g++ src/* -o build/linux/snake -Iinclude/ -lSDL2 -lSDL2_image -lSDL2_ttf -O3`
+`g++ src/* -o build/linux/snake -Iinclude/ -lSDL2 -lSDL2_image -lSDL2_ttf -O3 `wx-config --libs` `wx-config --cxxflags``
 
 ## conpiling for windows
 

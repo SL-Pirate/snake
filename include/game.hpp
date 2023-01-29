@@ -22,7 +22,6 @@ class Game{
     Dir dir;
     Food *foods[numFoodItems];
     Wall *wall = nullptr;
-    Snake *snake = nullptr;
     cMain *parent = nullptr;
 
     public:
@@ -30,6 +29,7 @@ class Game{
     ~Game();
 
     void start();
-
     void resume();
+
+    Snake *snake = nullptr;
 };

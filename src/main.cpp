@@ -1,5 +1,6 @@
 #include "wxwids.hpp"
 #include "game.hpp"
+#include "snake.hpp"
 
 wxBEGIN_EVENT_TABLE(cMain, wxFrame)
     EVT_BUTTON(1010, cMain::start)
@@ -18,7 +19,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Snake " VERSION, wxPoint(250, 50), 
     difficulty->SetName("Difficulty");
     btn1 = new wxButton(this, 1012, "Resume", wxPoint(150, 220), wxSize(100, 50));
     btn1->Hide();
-    out = new wxStaticText(this, wxID_ANY, outLabel, wxPoint(50, 290), wxSize(300, 140));
+    out = new wxStaticText(this, wxID_ANY, outLabel, wxPoint(50, 290), wxSize(300, 140), wxALIGN_CENTER_HORIZONTAL);
     out->Hide();
 }
 cMain::~cMain(){
@@ -35,6 +36,7 @@ void cMain::start(wxCommandEvent &evt){
     this->Hide();
     game = new Game(this);
     t = new std::thread(startGame);
+    out->Show();
 }
 void cMain::resume(wxCommandEvent &evt){
     this->Hide();
@@ -47,11 +49,17 @@ void cMain::pause(){
     this->Show();
     btn->Hide();
     btn1->Show();
+    outLabel = "Your Score: ";
+    outLabel << game->snake->getScore();
+    out->SetLabel(outLabel);
 }
 void cMain::startGame(){
     game->start();
 }
 void cMain::quit(){
+    outLabel = "Your Score: ";
+    outLabel << game->snake->getScore();
+    out->SetLabel(outLabel);
     this->btn->SetName("Restart");
     this->btn1->Hide();
     this->btn->Show();

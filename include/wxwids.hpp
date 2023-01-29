@@ -21,7 +21,7 @@ class cMain : public wxFrame{
     wxTextCtrl* txt = nullptr;
     wxStaticText* out = nullptr;
     wxStaticText* in = nullptr;
-    wxString outLabel = "\n\n\tResult goes here";
+    wxString outLabel = "\n\n\tScore goes here";
     std::thread *t = nullptr;
 
     void start(wxCommandEvent &evt);
