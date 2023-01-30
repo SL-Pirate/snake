@@ -1,0 +1,14 @@
+.
+├── snake.AppDir
+│   ├── AppRun
+│   ├── res -> /home/slpirate/Commons/programming/C++/snake/build_configs/res
+│   ├── snake.desktop
+│   ├── snake.png -> /home/slpirate/Commons/programming/C++/snake/res/gfx/snake.png
+│   └── usr
+│       ├── bin
+│       │   └── snake -> /home/slpirate/Commons/programming/C++/snake/build/linux/snake
+│       └── lib -> /home/slpirate/Commons/programming/C++/snake/lib/SDL2/linux
+├── snake-x86_64.AppImage
+└── structure.txt
+
+6 directories, 6 files
