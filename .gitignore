@@ -3,6 +3,8 @@
 
 #vscode config folder
 /.vscode/
+/.vs/
+/out/
 
 #dev vlogs
 /DevVlogs/

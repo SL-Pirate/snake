@@ -13,13 +13,12 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Snake " VERSION, wxPoint(250, 50), 
     this->SetBackgroundColour(*wxWHITE);
 #endif
     this->Center();
-    in = new wxStaticText(this, wxID_ANY, "welcome to the Snake Game\nPlease set difficulty:", wxPoint(50, 75), wxSize(300, 200));
+    in = new wxStaticText(this, wxID_ANY, "welcome to the Snake Game\nPlease set difficulty:", wxPoint(50, 30), wxSize(300, 100), wxALIGN_CENTER);
     difficulty = new wxSlider(this, 1009, 10, 1, 20, wxPoint(50, 150), wxSize(300, 50));
     btn = new wxButton(this, 1010, "Start", wxPoint(150, 220), wxSize(100, 50));
-    difficulty->SetName("Difficulty");
     btn1 = new wxButton(this, 1012, "Resume", wxPoint(150, 220), wxSize(100, 50));
     btn1->Hide();
-    out = new wxStaticText(this, wxID_ANY, outLabel, wxPoint(50, 290), wxSize(300, 140), wxALIGN_CENTER_HORIZONTAL);
+    out = new wxStaticText(this, wxID_ANY, outLabel, wxPoint(50, 290), wxSize(300, 140), wxALIGN_CENTER);
     out->Hide();
 }
 cMain::~cMain(){
@@ -27,7 +26,6 @@ cMain::~cMain(){
     delete(game);
     delete(btn);
     delete(btn1);
-    delete(txt);
     delete(out);
     delete(in);
     delete(t);
@@ -66,6 +64,8 @@ void cMain::quit(){
     this->Show();
     game = nullptr;
     t = nullptr;
+
+    SDL_Quit();
 }
 Game *cMain::game = nullptr;
 
@@ -78,4 +78,29 @@ bool cApp::OnInit(){
     return true;
 }
 
-wxIMPLEMENT_APP(cApp);
+
+wxIMPLEMENT_APP_NO_MAIN(cApp);
+
+// #ifdef _WIN32
+// int wmain( int argc, wchar_t* argv[] ){
+//     if (SDL_Init(SDL_INIT_VIDEO) < 0){
+//         // std::cout << "Error: SDL INIT VIDEO FAILED!" << SDL_GetError() << std::endl;
+//     }
+//     if (!IMG_Init(IMG_INIT_PNG)){
+//         // std::cout << "SDL_IMG INIT FAILED! Error: " << SDL_GetError() << std::endl;
+//     }
+//     if (TTF_Init() == -1){
+//         // std::cout << "TTF INIT FAILED! Error: " << TTF_GetError() << std::endl;
+//     }
+
+//     return wxEntry(argc, argv);
+// }
+// #else
+int main(int argc, char** argv){
+    if (SDL_Init(SDL_INIT_VIDEO) < 0){
+        // std::cout << "Error: SDL INIT VIDEO FAILED!" << SDL_GetError() << std::endl;
+    }
+
+    return wxEntry(argc, argv);
+}
+// #endif

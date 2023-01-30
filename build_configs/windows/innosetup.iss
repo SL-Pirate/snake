@@ -21,7 +21,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=F:\programming\C++\snake\build\windows\LICENSES\LICENSE
+LicenseFile=F:\programming\C++\snake\LICENSE
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
@@ -38,12 +38,11 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "F:\programming\C++\snake\build\windows\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\build\windows\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\build\windows\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\build\windows\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\build\windows\LICENSES\*"; DestDir: "{app}\LICENSES"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "F:\programming\C++\snake\build\windows\res\*"; DestDir: "{app}\res"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "F:\programming\C++\snake\build\windows\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "F:\programming\C++\snake\lib\SDL2\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "F:\programming\C++\snake\lib\SDL2\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "F:\programming\C++\snake\lib\SDL2\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "F:\programming\C++\snake\build_configs\res\*"; DestDir: "{app}\res"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

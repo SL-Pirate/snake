@@ -3,16 +3,13 @@
 #include "snake.hpp"
 
 Game::Game(cMain *parent){
-    if (SDL_Init(SDL_INIT_VIDEO) < 0){
-        // std::cout << "Error: SDL INIT VIDEO FAILED!" << SDL_GetError() << std::endl;
-    }
+    this->parent = parent;
     if (!IMG_Init(IMG_INIT_PNG)){
         // std::cout << "SDL_IMG INIT FAILED! Error: " << SDL_GetError() << std::endl;
     }
     if (TTF_Init() == -1){
         // std::cout << "TTF INIT FAILED! Error: " << TTF_GetError() << std::endl;
     }
-    this->parent = parent;
 }
 
 void Game::start(){
@@ -138,8 +135,7 @@ Game::~Game(){
     delete(snake);
     delete(wall);
 
-    TTF_Quit;
-    SDL_Quit;
+    TTF_Quit();
 }
 
 void Game::resume(){

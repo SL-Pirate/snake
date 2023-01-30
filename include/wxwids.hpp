@@ -18,7 +18,6 @@ class cMain : public wxFrame{
     private:
     wxButton* btn = nullptr;
     wxButton *btn1 = nullptr;
-    wxTextCtrl* txt = nullptr;
     wxStaticText* out = nullptr;
     wxStaticText* in = nullptr;
     wxString outLabel = "\n\n\tScore goes here";
