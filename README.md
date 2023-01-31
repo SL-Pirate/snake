@@ -67,6 +67,8 @@ do `sudo chmod +x ./snake`
         ├── lib
         etc...
     ```
+1. Add the path_to_the_root_of_your_SDL2_BaseFolder to your system environment variables under the name `SDL2`
+
 ### Compiling
 - if using `MinGW32-gcc`
 ```sh
