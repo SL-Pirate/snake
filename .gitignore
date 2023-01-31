@@ -1,5 +1,6 @@
 # build folder
 /build/
+/tmp/
 
 #vscode config folder
 /.vscode/
