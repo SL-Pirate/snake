@@ -70,6 +70,7 @@ message(STATUS "Adding icon")
 set(APP_ICON ${CMAKE_CURRENT_SOURCE_DIR}/res/icon.rc)
 
 add_executable(snake ${SOURCES} ${APP_ICON})
+set_property(TARGET snake PROPERTY CXX_STANDARD 17)
 target_link_libraries(snake ${SDL2_LIBRARIES} $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>  $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static> ${wxWidgets_LIBRARIES})
 
 message(STATUS "Setting up resource files")
