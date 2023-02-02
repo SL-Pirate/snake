@@ -2,7 +2,7 @@
 
 //marcos
 #define SDL_MAIN_HANDLED
-#define VERSION "v2.0"
+#define VERSION "v3.0"
 //#define multiWinWidth 592
 //#define multiWinWidth 592
 #define texWidth 16
