@@ -1,9 +1,10 @@
-# Snake game in sdl, my own version
+# A Multi-Player Snake game in sdl
 
 ## ScreenShots
 
 ![menu](https://raw.githubusercontent.com/SL-Pirate/snake/main/screenshots/menu.png)
 ![game](https://raw.githubusercontent.com/SL-Pirate/snake/main/screenshots/game.png)
+![multiplayer]()
 ![paused](https://raw.githubusercontent.com/SL-Pirate/snake/main/screenshots/paused.png)
 ![game over](https://raw.githubusercontent.com/SL-Pirate/snake/main/screenshots/gameOver.png)
 
