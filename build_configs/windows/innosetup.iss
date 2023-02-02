@@ -39,9 +39,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "F:\programming\C++\snake\build\windows\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\lib\SDL2\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\lib\SDL2\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\lib\SDL2\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "F:\programming\C++\snake\build\windows\Release\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "F:\programming\C++\snake\build\windows\Release\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "F:\programming\C++\snake\build\windows\Release\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\programming\C++\snake\build_configs\res\*"; DestDir: "{app}\res"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
