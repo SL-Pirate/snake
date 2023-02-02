@@ -138,8 +138,5 @@ target_link_libraries(snake ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2TTF_L
 message(STATUS "Setting up resource files")
 add_custom_command(TARGET snake PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:snake>/res/)
 
-message(STATUS "Setting up dynamic libraries")
-add_custom_command(TARGET snake PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/lib/SDL2/linux/ $<TARGET_FILE_DIR:snake>)
-
 endif()
 endif()

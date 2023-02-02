@@ -19,7 +19,6 @@ class Game{
     bool isKeyPressed = false;
     bool isPaused = false;
     SDL_Event evnt;
-    Dir dir;
     Food *foods[numFoodItems];
     Wall *wall = nullptr;
     cMain *parent = nullptr;
@@ -29,7 +28,10 @@ class Game{
     ~Game();
 
     void start();
+    void startMultiplayer();
     void resume();
 
     Snake *snake = nullptr;
+    Snake *snake1 = nullptr;
+    Snake *snake2 = nullptr;
 };

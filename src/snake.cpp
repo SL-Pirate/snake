@@ -12,18 +12,38 @@ Entity::~Entity(){
 
 
 //definition of the actual "Snake" class
-Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty){
+Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, BodyColor color){
     this->gameWin = gameWin;
     this->arr = arr;
-    texture = gameWin->loadTexture(realP "res/gfx/body.png"); // res/gfx/body.png
+    this->color = color;
+    snake = new GraphicItem*[ROWS() * COLS()];
+    
+    const char *filePath;
+
+    if (color == RED){
+        filePath = realP "res/gfx/red.png";
+        texture = gameWin->loadTexture(filePath); // res/gfx/body.png
+        snake[0] = new GraphicItem(texture, (int) ROWS()/2, (int) COLS()/2, SNAKE);
+        snake[1] = new GraphicItem(texture, (int) ROWS()/2 + 1, (int) COLS()/2, SNAKE);
+
+        //display scores
+        scoreTitle = "Arrows: ";
+        font = new Fonts(gameWin, scoreTitle + std::to_string(score), color, winWidth/4-50, winHeight);
+    }
+    else if(color == BLUE){
+        dir = left;
+        filePath = realP "res/gfx/blue.png";
+        texture = gameWin->loadTexture(filePath); // res/gfx/body.png
+        snake[0] = new GraphicItem(texture, (int) ROWS()/2, (int) COLS()/2 + 1, SNAKE);
+        snake[1] = new GraphicItem(texture, (int) ROWS()/2 + 1, (int) COLS()/2 + 1, SNAKE);
+
+        //display scores
+        scoreTitle = "WASD: ";
+        font = new Fonts(gameWin, scoreTitle + std::to_string(score), color, winWidth*3/4-50, winHeight); 
+    }
+    
     this->difficulty = difficulty;
-
-    snake[0] = new GraphicItem(texture, (int) ROWS/2, (int) COLS/2, SNAKE);
-    snake[1] = new GraphicItem(texture, (int) ROWS/2 + 1, (int) COLS/2, SNAKE);
     length = 2;
-
-    //display scores
-    font = new Fonts(gameWin, "SCORE: " + std::to_string(score));
 }
 
 void Snake::addToArr(){
@@ -116,7 +136,7 @@ void Snake::ate(GraphicItem *nextItem){
     delete(arr[nextItem->getPos()[0]][nextItem->getPos()[1]]);
 
     //output the score
-    font->setTitle("SCORE: " + std::to_string(score));
+    font->setTitle(scoreTitle + std::to_string(score));
 }
 
 void Snake::clearItem(){

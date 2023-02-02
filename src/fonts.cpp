@@ -1,7 +1,8 @@
 #include "snake.hpp"
 
-Fonts::Fonts(Window *gameWin, std::string title){
+Fonts::Fonts(Window *gameWin, std::string title, BodyColor color, int x, int y){
     this->gameWin  = gameWin;
+    this->color = color;
 
     font = TTF_OpenFont(realP "res/fonts/LiberationSans-Bold.ttf", 72);
     // if (font == nullptr){
@@ -11,8 +12,8 @@ Fonts::Fonts(Window *gameWin, std::string title){
     dst = new SDL_Rect();
     dst->h = 25;
     dst->w = 100;
-    dst->x = 190;
-    dst->y = 500;
+    dst->x = x;   //190;
+    dst->y = y;   //500;
 
     setTitle(title);
 }
@@ -31,7 +32,17 @@ void Fonts::setTitle(std::string title){
         texture = nullptr;
     }
 
-    SDL_Surface *textSurf = TTF_RenderText_Blended(font, title.c_str(), {225, 0, 0});
+    SDL_Surface *textSurf = nullptr;
+    switch(color){
+        case RED:
+            textSurf = TTF_RenderText_Blended(font, title.c_str(), {225, 0, 0});
+            break;
+        case BLUE:
+            textSurf = TTF_RenderText_Blended(font, title.c_str(), {0, 0, 225});
+            break;
+        default:
+            textSurf = TTF_RenderText_Blended(font, title.c_str(), {225, 0, 0});
+    }
 
     texture = SDL_CreateTextureFromSurface(gameWin->ren, textSurf);
 

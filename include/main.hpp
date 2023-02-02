@@ -3,12 +3,10 @@
 //marcos
 #define SDL_MAIN_HANDLED
 #define VERSION "v2.0"
-#define winWidth 496
-#define winHeight 496
+//#define multiWinWidth 592
+//#define multiWinWidth 592
 #define texWidth 16
 #define texHeight 16
-#define ROWS winHeight / 16 //resolves to number y
-#define COLS winWidth / 16 //resolves to number x
 #define numFoodItems 3
 
 #if defined(DEBUG)
@@ -38,8 +36,21 @@
 #include <wx/wx.h>
 
 
-//globals vars
+//ENUMs
 enum ID{WALL, SNAKE, FOOD};
 //enums required to determine the direction of the movement of the snake
 //"stop" is only a placeholder
 enum Dir{up, down, left, right, stop};
+enum BodyColor{RED, BLUE};
+
+//global vars
+inline int winWidth = 496;
+inline int winHeight = 496;
+//resolves to y
+inline const int ROWS(){
+    return winHeight / 16;
+}
+//resolves to x
+inline const int COLS(){
+    return winWidth / 16;
+}
