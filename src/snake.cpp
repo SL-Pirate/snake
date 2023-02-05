@@ -17,6 +17,8 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, BodyColo
     this->arr = arr;
     this->color = color;
     snake = new GraphicItem*[ROWS() * COLS()];
+    eatSound = new Sound("res/sfx/boom.wav");
+    dieSound = new Sound("res/sfx/aaaugh.wav");
     
     const char *filePath;
 
@@ -77,6 +79,7 @@ bool Snake::move(){
     }
     if (nextItem != nullptr){
         if(nextItem->id == WALL || nextItem->id == SNAKE){
+            dieSound->play();
             return false;
         }
         else if(nextItem->id == FOOD){
@@ -137,6 +140,9 @@ void Snake::ate(GraphicItem *nextItem){
 
     //output the score
     font->setTitle(scoreTitle + std::to_string(score));
+
+    //play sound effect
+    eatSound->play();
 }
 
 void Snake::clearItem(){

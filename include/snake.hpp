@@ -3,6 +3,7 @@
 #include "main.hpp"
 #include "sdl_window.hpp"
 #include "graphic_handler.hpp"
+#include "sound.hpp"
 
 
 //parent class for all entities snake, wall and food
@@ -55,6 +56,8 @@ class Snake : public Entity {
     int score = 0;
     wxSlider *difficulty = nullptr;
     std::string scoreTitle;
+    Sound* eatSound;
+    Sound* dieSound;
 
     void ate(GraphicItem *nextItem);
     void clearItem();

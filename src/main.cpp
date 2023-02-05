@@ -1,6 +1,16 @@
 #include "wxwids.hpp"
 #include "game.hpp"
 #include "snake.hpp"
+#include "error.hpp"
+
+int main(int argc, char** argv){
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0){
+        throw SDL_InitError();
+        return 101;
+    }
+
+    return wxEntry(argc, argv);
+}
 
 wxBEGIN_EVENT_TABLE(cMain, wxFrame)
     EVT_BUTTON(1010, cMain::start)
@@ -37,9 +47,21 @@ void cMain::start(wxCommandEvent &evt){
     btn->Hide();
     btn2->Hide();
     btn1->Show();
-    game = new Game(this);
-    t = new std::thread(startGame);
-    out->Show();
+    try{
+        game = new Game(this);
+        t = new std::thread(startGame);
+        out->Show();
+    }
+    catch(ImageInitError e){
+        outLabel = "";
+        outLabel << e.what();
+        out->SetLabel(outLabel);
+    }
+    catch(TTF_InitError e){
+        outLabel = "";
+        outLabel << e.what();
+        out->SetLabel(outLabel);
+    }
 }
 void cMain::startMultiplayer(wxCommandEvent &evt){
     multiplayer = true;
@@ -99,8 +121,6 @@ void cMain::quit(){
     game = nullptr;
     t = nullptr;
     multiplayer = false;
-
-    SDL_Quit();
 }
 Game *cMain::game = nullptr;
 bool cMain::multiplayer = false;
@@ -114,14 +134,4 @@ bool cApp::OnInit(){
     return true;
 }
 
-
 wxIMPLEMENT_APP_NO_MAIN(cApp);
-
-int main(int argc, char** argv){
-    if (SDL_Init(SDL_INIT_VIDEO) < 0){
-        // std::cout << "Error: SDL INIT VIDEO FAILED!" << SDL_GetError() << std::endl;
-    }
-
-    return wxEntry(argc, argv);
-}
-// #endif

@@ -1,14 +1,25 @@
 #include "game.hpp"
 #include "sdl_window.hpp"
 #include "snake.hpp"
+#include "error.hpp"
+#include "sound.hpp"
 
 Game::Game(cMain *parent){
     this->parent = parent;
     if (!IMG_Init(IMG_INIT_PNG)){
-        // std::cout << "SDL_IMG INIT FAILED! Error: " << SDL_GetError() << std::endl;
+        gameRunning = false;
+        throw ImageInitError();
     }
     if (TTF_Init() == -1){
-        // std::cout << "TTF INIT FAILED! Error: " << TTF_GetError() << std::endl;
+        gameRunning = false;
+        throw TTF_InitError();
+    }
+    Mix_Init(MIX_INIT_MP3);
+    if(Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 1024)==-1) {
+        Sound::hasSound = false;
+    }
+    else{
+        Sound::hasSound = true;
     }
 }
 
@@ -263,7 +274,16 @@ Game::~Game(){
     delete(snake2);
     delete(wall);
 
+    //waiting for the game over music to finish (only if exists)
+    if(Sound::hasSound){
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
+
+    Mix_CloseAudio();
+    IMG_Quit();
     TTF_Quit();
+    Mix_Quit();
+    SDL_Quit();
 }
 
 void Game::resume(){

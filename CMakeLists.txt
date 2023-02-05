@@ -83,6 +83,9 @@ add_custom_command(TARGET snake PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SDL
 add_custom_command(TARGET snake PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_ROOT_DIR}/SDL2_ttf/lib/x86/SDL2_ttf.dll $<TARGET_FILE_DIR:snake>)
 endif()
 
+
+#_____________________________________________________________________________________________________________________________________#
+
 #UNIX / LINUX
 elseif(UNIX)
 
@@ -99,12 +102,14 @@ endif()
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
 INCLUDE(FindPkgConfig)
 
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image)
 PKG_SEARCH_MODULE(SDL2TTF REQUIRE SDL2_ttf)
+PKG_SEARCH_MODULE(SDL2MIXER REQUIRED SDL2_mixer)
 
 if(SDL2_FOUND)
 message(STATUS "Found SDL2.\nLooking for a valid installation of SDL2_image")
@@ -121,20 +126,27 @@ message(ERROR "SDL2_image not found")
 endif()
 
 if(SDL2TTF_FOUND)
-message(STATUS "Found SDL2_image")
+message(STATUS "Found SDL2_mixer.\nLooking for a valid installation of SDL2_mixer")
 else()
 set(VALID FALSE)
 message(ERROR "SDL2_ttf not found")
+endif()
+
+if(SDL2MIXER_FOUND)
+message(STATUS "Found SDL2_mixer")
+else()
+set(VALID FALSE)
+message(ERROR "SDL2_mixer not found")
 endif()
 
 if(VALID)
 message(STATUS "Sources Ready!")
 
 include(${wxWidgets_USE_FILE})
-include_directories(include ${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS})
+include_directories(include ${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${SDL2MIXER_INCLUDE_DIRS})
 
 add_executable(snake ${SOURCES})
-target_link_libraries(snake ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2TTF_LIBRARIES} ${wxWidgets_LIBRARIES})
+target_link_libraries(snake ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2TTF_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${wxWidgets_LIBRARIES})
 
 message(STATUS "Setting up resource files")
 add_custom_command(TARGET snake PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:snake>/res/)
