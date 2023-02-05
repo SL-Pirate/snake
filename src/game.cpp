@@ -121,6 +121,12 @@ void Game::start(){
         int sleeptime = 1000 / parent->difficulty->GetValue();
         std::this_thread::sleep_for(std::chrono::milliseconds(sleeptime));
     }
+
+    //waiting for the game over music to finish (only if exists)
+    if(Sound::hasSound){
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
+
     parent->quit();
     delete(this);
 }
@@ -247,6 +253,12 @@ void Game::startMultiplayer(){
         int sleeptime = 1000 / parent->difficulty->GetValue();
         std::this_thread::sleep_for(std::chrono::milliseconds(sleeptime));
     }
+
+    //waiting for the game over music to finish (only if exists)
+    if(Sound::hasSound){
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
+    
     parent->quit();
     delete(this);
 }
@@ -273,11 +285,6 @@ Game::~Game(){
     delete(snake1);
     delete(snake2);
     delete(wall);
-
-    //waiting for the game over music to finish (only if exists)
-    if(Sound::hasSound){
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-    }
 
     Mix_CloseAudio();
     IMG_Quit();

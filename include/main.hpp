@@ -2,7 +2,7 @@
 
 //marcos
 #define SDL_MAIN_HANDLED
-#define VERSION "v3.0"
+#define VERSION "v4.0"
 //#define multiWinWidth 592
 //#define multiWinWidth 592
 #define texWidth 16
@@ -19,16 +19,22 @@
 
 //for debugging purposes
 #include <iostream>
-#ifdef __linux__
+#if defined (__linux__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-#else
+#elif defined (_WIN32)
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <SDL_ttf.h>
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#else
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #endif 
 #include <thread>
 #include <chrono>

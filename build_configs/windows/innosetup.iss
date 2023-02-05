@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "snake"
-#define MyAppVersion "3.0"
+#define MyAppVersion "4.0"
 #define MyAppPublisher "alfatech"
 #define MyAppURL "https://www.github.com/SL-Pirate/snake"
 #define MyAppExeName "snake.exe"
@@ -42,6 +42,7 @@ Source: "F:\programming\C++\snake\build\windows\Release\{#MyAppExeName}"; DestDi
 Source: "F:\programming\C++\snake\build\windows\Release\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\programming\C++\snake\build\windows\Release\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\programming\C++\snake\build\windows\Release\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "F:\programming\C++\snake\build\windows\Release\SDL2_mixer.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\programming\C++\snake\build_configs\res\*"; DestDir: "{app}\res"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
