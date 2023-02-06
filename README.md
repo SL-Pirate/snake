@@ -14,6 +14,7 @@
 - SDL2
 - SDL2_image
 - SDL2_ttf
+- SDL2_mixer
 - cmake
 - git
 
@@ -41,11 +42,13 @@ do `sudo chmod +x ./snake`
     - SDL2
     - SDL2_image
     - SDL2_ttf
+    - SDL2_mixer
     
     corresponding to your compiler
 1. Extract the development package of SDL2 and rename the directory as SDL2
 1. Extract the development package of SDL2_image to the same folder and rename it as SDL2_image
 1. Extract the development package of SDL2_image to the same folder and rename it as SDL2_ttf
+1. Extract the development package of SDL2_mixer to the same folder and rename it as SDL2_mixer
 
     Now your directory should look like this
     ```tree
@@ -63,6 +66,12 @@ do `sudo chmod +x ./snake`
         etc...
     ........
         SDL2_ttf
+        ├── cmake
+        ├── include
+        ├── lib
+        etc...
+    ........
+        SDL2_mixer
         ├── cmake
         ├── include
         ├── lib
