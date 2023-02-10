@@ -2,16 +2,15 @@
 
 //marcos
 #define SDL_MAIN_HANDLED
-#define VERSION "v4.0"
-//#define multiWinWidth 592
-//#define multiWinWidth 592
+#define VERSION "v4.1"
 #define texWidth 16
 #define texHeight 16
 #define numFoodItems 3
 
-#if defined(DEBUG)
+//for debugging purposes only
+#if defined(DEBUG_LINUX)
 #define realP "/home/slpirate/Commons/programming/C++/snake/"
-#elif defined(DEBUG_LINUX)
+#elif defined(DEBUG_WIN)
 #define realP "F:\\programming\\c++\\snake\\"
 #else
 #define realP ""
@@ -46,8 +45,7 @@
 //ENUMs
 enum ID{WALL, SNAKE, FOOD};
 //enums required to determine the direction of the movement of the snake
-//"stop" is only a placeholder
-enum Dir{up, down, left, right, stop};
+enum Dir{up, down, left, right};
 enum BodyColor{RED, BLUE};
 
 //global vars
