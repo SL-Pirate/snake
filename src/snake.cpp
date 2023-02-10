@@ -78,10 +78,12 @@ bool Snake::move(){
             nextItem = arr[snake[0]->getPos()[0] + 1][snake[0]->getPos()[1]];
     }
     if (nextItem != nullptr){
+        //Hit the wall (or a snake in that case)
         if(nextItem->id == WALL || nextItem->id == SNAKE){
             dieSound->play();
             return false;
         }
+        //ate food
         else if(nextItem->id == FOOD){
             ate(nextItem);
         }
