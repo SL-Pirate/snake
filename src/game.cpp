@@ -25,8 +25,8 @@ Game::Game(cMain *parent){
 
 void Game::start(){
     gameWin = new Window("Snake", winHeight + 44, winWidth);
-
     background = gameWin->loadTexture(realP "res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
+    foods = new Food*[numFoodItemsSinglePlayer];
 
     // arr[ROWS()][COLS()]
     //equates to arr[y][x]
@@ -45,12 +45,14 @@ void Game::start(){
 
     //implementing snake & food
     snake = new Snake(gameWin, arr, parent->difficulty/*1000/parent->difficulty->GetValue()*/, RED);
-    Dir dir = right;
-    for (int i = 0; i < numFoodItems; i++){
+    for (int i = 0; i < numFoodItemsSinglePlayer; i++){
         foods[i] = new Food(gameWin, arr);
     }
 
+    Dir *dirs = resetDirs();
+
     while(gameRunning) {
+        
         while (SDL_PollEvent(&evnt)){
             if (evnt.type == SDL_QUIT){
                 gameRunning = false;
@@ -59,19 +61,19 @@ void Game::start(){
                 switch(evnt.key.keysym.sym){
                     case SDLK_UP:
                         isKeyPressed = true;
-                        dir = up;
+                        setDir(up, dirs);
                         break;
                     case SDLK_DOWN:
                         isKeyPressed = true;
-                        dir = down;
+                        setDir(down, dirs);
                         break;
                     case SDLK_LEFT:
                         isKeyPressed = true;
-                        dir = left;
+                        setDir(left, dirs);
                         break;
                     case SDLK_RIGHT:
                         isKeyPressed = true;
-                        dir = right;
+                        setDir(right, dirs);
                         break;
                     case SDLK_ESCAPE:
                         isKeyPressed = true;
@@ -89,9 +91,10 @@ void Game::start(){
         //move the snake
         if (isKeyPressed){
             if (!isPaused){
-                if(!snake->move(dir)){
+                if(!snake->move(dirs)){
                     gameRunning = false;
                 }
+                dirs = resetDirs();
                 isKeyPressed = false;
             }
         }
@@ -102,7 +105,7 @@ void Game::start(){
         }
     
         //refresh food
-        for (int i = 0; i < numFoodItems; i++){
+        for (int i = 0; i < numFoodItemsSinglePlayer; i++){
             foods[i]->genFood();
         }
 
@@ -128,12 +131,17 @@ void Game::start(){
     }
 
     parent->quit();
+    for (int i = 0; i < numFoodItemsSinglePlayer; i++){
+        delete (foods[i]);
+        foods[i] = nullptr;
+    }
     delete(this);
 }
+
 void Game::startMultiplayer(){
     gameWin = new Window("Snake", winHeight + 44, winWidth);
-
     background = gameWin->loadTexture(realP "res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
+    foods = new Food*[numFoodItemsMultiPlayer];
 
     // arr[ROWS()][COLS()]
     //equates to arr[y][x]
@@ -152,12 +160,17 @@ void Game::startMultiplayer(){
 
     //implementing snake & food
     snake1 = new Snake(gameWin, arr, parent->difficulty/*1000/parent->difficulty->GetValue()*/, RED);
-    Dir dir1 = right;
     snake2 = new Snake(gameWin, arr, parent->difficulty/*1000/parent->difficulty->GetValue()*/, BLUE);
-    Dir dir2 = left;
-    for (int i = 0; i < numFoodItems; i++){
+    snake->setInitialDir(left);
+    for (int i = 0; i < numFoodItemsMultiPlayer; i++){
         foods[i] = new Food(gameWin, arr);
     }
+
+    Dir *dir1 = resetDirs();
+    Dir *dir2 = resetDirs();
+
+    bool *snake1_moved = new bool(false);
+    bool *snake2_moved = new bool(false);
 
     while(gameRunning) {
         while (SDL_PollEvent(&evnt)){
@@ -168,35 +181,35 @@ void Game::startMultiplayer(){
                 switch(evnt.key.keysym.sym){
                     case SDLK_UP:
                         isKeyPressed = true;
-                        dir1 = up;
+                        setDir(up, dir1, snake1_moved);
                         break;
                     case SDLK_DOWN:
                         isKeyPressed = true;
-                        dir1 = down;
+                        setDir(down, dir1, snake1_moved);
                         break;
                     case SDLK_LEFT:
                         isKeyPressed = true;
-                        dir1 = left;
+                        setDir(left, dir1, snake1_moved);
                         break;
                     case SDLK_RIGHT:
                         isKeyPressed = true;
-                        dir1 = right;
+                        setDir(right, dir1, snake1_moved);
                         break;
                     case SDLK_w:
                         isKeyPressed = true;
-                        dir2 = up;
+                        setDir(up, dir2, snake2_moved);
                         break;
                     case SDLK_s:
                         isKeyPressed = true;
-                        dir2 = down;
+                        setDir(down, dir2, snake2_moved);
                         break;
                     case SDLK_a:
                         isKeyPressed = true;
-                        dir2 = left;
+                        setDir(left, dir2, snake2_moved);
                         break;
                     case SDLK_d:
                         isKeyPressed = true;
-                        dir2 = right;
+                        setDir(right, dir2, snake2_moved);
                         break;
                     case SDLK_ESCAPE:
                         isKeyPressed = true;
@@ -214,26 +227,33 @@ void Game::startMultiplayer(){
         //move the snake
         if (isKeyPressed){
             if (!isPaused){
-                if(!snake1->move(dir1)){
-                    gameRunning = false;
+                if(snake1_moved){
+                    gameRunning = snake1->move(dir1);
+                    *snake1_moved = false;
+                    dir1 = resetDirs();
                 }
-                if(!snake2->move(dir2)){
-                    gameRunning = false;
+
+                if(snake2_moved){
+                    gameRunning = snake2->move(dir2);
+                    *snake2_moved = false;
+                    dir2 = resetDirs();
                 }
                 isKeyPressed = false;
             }
         }
         else{
             if(!snake1->move()){
+                snake1->applyPenalty();
                 gameRunning = false;
             }
             if(!snake2->move()){
+                snake2->applyPenalty();
                 gameRunning = false;
             }
         }
     
         //refresh food
-        for (int i = 0; i < numFoodItems; i++){
+        for (int i = 0; i < numFoodItemsMultiPlayer; i++){
             foods[i]->genFood();
         }
 
@@ -258,8 +278,12 @@ void Game::startMultiplayer(){
     if(Sound::hasSound){
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }
-    
+
     parent->quit();
+    for (int i = 0; i < numFoodItemsMultiPlayer; i++){
+        delete (foods[i]);
+        foods[i] = nullptr;
+    }
     delete(this);
 }
 
@@ -275,16 +299,16 @@ Game::~Game(){
         }
        delete(arr[i]);
     }
-   delete (arr);
+    delete (arr);
     arr = nullptr;
-    for (int i = 0; i < numFoodItems; i++){
-        delete (foods[i]);
-        foods[i] = nullptr;
-    }
     delete(snake);
+    snake = nullptr;
     delete(snake1);
+    snake1 = nullptr;
     delete(snake2);
+    snake2 = nullptr;
     delete(wall);
+    wall = nullptr;
 
     Mix_CloseAudio();
     IMG_Quit();
@@ -295,4 +319,40 @@ Game::~Game(){
 
 void Game::resume(){
     isPaused = false;
+}
+
+void Game::setDir(Dir currentDir, Dir *dirs){
+    for (int i = 0; i <= maxNumChainedMovesAllowed; i++){
+        if (dirs[i] != none){
+            continue;
+        }
+        else {
+            dirs[i] = currentDir;
+            break;
+        }
+    }
+}
+
+void Game::setDir(Dir currentDir, Dir *dirs, bool *snake_moved){
+    for (int i = 0; i <= maxNumChainedMovesAllowed; i++){
+        if (dirs[i] != none){
+            continue;
+        }
+        else {
+            dirs[i] = currentDir;
+            break;
+        }
+    }
+
+    *snake_moved = true;
+}
+
+Dir *Game::resetDirs(){
+    // setting chained inputs (directions) to none
+    Dir *dirs = new Dir[maxNumChainedMovesAllowed];
+    for (int i = 0; i < maxNumChainedMovesAllowed; i++){
+        dirs[i] = none;
+    }
+
+    return dirs;
 }

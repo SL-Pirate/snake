@@ -19,9 +19,12 @@ class Game{
     bool isKeyPressed = false;
     bool isPaused = false;
     SDL_Event evnt;
-    Food *foods[numFoodItems];
+    Food **foods = nullptr;
     Wall *wall = nullptr;
     cMain *parent = nullptr;
+    void setDir(Dir currentDir, Dir *dirs);
+    void setDir(Dir currentDir, Dir *dirs, bool *snake_moved);
+    Dir *resetDirs();
 
     public:
     Game(cMain *parent);

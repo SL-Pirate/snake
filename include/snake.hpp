@@ -53,6 +53,7 @@ class Snake : public Entity {
     GraphicItem **snake;
     int length = 0;
     Dir dir = right;
+    Dir *registeredDirs;
     int score = 0;
     wxSlider *difficulty = nullptr;
     std::string scoreTitle;
@@ -61,6 +62,7 @@ class Snake : public Entity {
 
     void ate(GraphicItem *nextItem);
     void clearItem();
+    Dir getNextDir();
     
     public:
     Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, BodyColor color);
@@ -68,8 +70,11 @@ class Snake : public Entity {
 
     void addToArr();
     bool move();
-    bool move(Dir direction);
+    bool move(Dir *dirs);
+    void setInitialDir(Dir dir);
     int getScore();
+    void applyPenalty(double penaltyPerCent);
+    void applyPenalty();
 
     Fonts *font = nullptr;
     BodyColor color;

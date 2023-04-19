@@ -19,6 +19,8 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, BodyColo
     snake = new GraphicItem*[ROWS() * COLS()];
     eatSound = new Sound("res/sfx/boom.wav");
     dieSound = new Sound("res/sfx/aaaugh.wav");
+    registeredDirs = new Dir[maxNumChainedMovesAllowed];
+    setInitialDir(right);
     
     const char *filePath;
 
@@ -59,6 +61,19 @@ Snake::~Snake(){
 }
 
 bool Snake::move(){
+    Dir direction = getNextDir();
+    if (dir == left && direction != right){
+        dir = direction;
+    }
+    else if (dir == right && direction != left){
+        dir = direction;
+    }
+    else if (dir == up && direction != down){
+        dir = direction;
+    }
+    else if (dir == down && direction != up){
+        dir = direction;
+    }
     //deleting the last square where the snake's tail was last in
     arr[snake[length - 1]->getPos()[0]][snake[length - 1]->getPos()[1]] = nullptr;
 
@@ -115,21 +130,24 @@ bool Snake::move(){
     return true;
 }
 
-bool Snake::move(Dir direction){
-    if (dir == left && direction != right){
-        dir = direction;
-    }
-    else if (dir == right && direction != left){
-        dir = direction;
-    }
-    else if (dir == up && direction != down){
-        dir = direction;
-    }
-    else if (dir == down && direction != up){
-        dir = direction;
-    }
-
+bool Snake::move(Dir *dirs){
+    delete(registeredDirs);
+    registeredDirs = dirs;
     return move();
+}
+
+Dir Snake::getNextDir(){
+    Dir currentDir = registeredDirs[0];
+
+    //removing second dir from the list
+    for (int i = 1; i < maxNumChainedMovesAllowed; i++){
+        if (registeredDirs[i] != none){
+            registeredDirs[i - 1] = registeredDirs[i];
+        }
+    }
+    registeredDirs[maxNumChainedMovesAllowed] = none;
+
+    return currentDir;
 }
 
 void Snake::ate(GraphicItem *nextItem){
@@ -147,10 +165,27 @@ void Snake::ate(GraphicItem *nextItem){
     eatSound->play();
 }
 
+void Snake::setInitialDir(Dir dir){
+    registeredDirs[0] = dir;
+    for (int i = 1; i < maxNumChainedMovesAllowed; i++){
+        registeredDirs[i] = none;
+    }
+}
+
 void Snake::clearItem(){
     item = nullptr;
 }
 
 int Snake::getScore(){
     return score;
+}
+
+// apply a penalty for defined amount to the score as a percentage
+void Snake::applyPenalty(double penaltyPerCent){
+    score -= (int) (score * penaltyPerCent / 100.0);
+}
+
+// apply a penalty of 10% to the score
+void Snake::applyPenalty(){
+    applyPenalty(10);
 }

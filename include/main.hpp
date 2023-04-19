@@ -5,7 +5,9 @@
 #define VERSION "v4.1"
 #define texWidth 16
 #define texHeight 16
-#define numFoodItems 3
+#define numFoodItemsSinglePlayer 2
+#define numFoodItemsMultiPlayer 2
+#define maxNumChainedMovesAllowed 3
 
 //for debugging purposes only
 #if defined(DEBUG_LINUX)
@@ -45,7 +47,7 @@
 //ENUMs
 enum ID{WALL, SNAKE, FOOD};
 //enums required to determine the direction of the movement of the snake
-enum Dir{up, down, left, right};
+enum Dir{up, down, left, right, none};
 enum BodyColor{RED, BLUE};
 
 //global vars

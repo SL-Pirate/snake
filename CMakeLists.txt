@@ -8,7 +8,7 @@ set(VALID FALSE)
 
 #WINDOWS
 if(WIN32)
-message(STATUS "Building for Windows")
+message(WARNING "Building for Windows")
 message(STATUS "Looking for a valid installation of wxWidgets")
 
 # Add the path_to_wxWidgets_installation_folder to your environment variables under the name "wxWidgets"
@@ -108,7 +108,7 @@ endif()
 #UNIX / LINUX
 elseif(UNIX)
 
-message(STATUS "Building for Unix")
+message(WARNING "Configuring for Linux/Unix")
 message(STATUS "Looking for a valid installation of wxWidgets")
 find_package(wxWidgets COMPONENTS core base REQUIRED)
 if(wxWidgets_FOUND)
