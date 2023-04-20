@@ -319,6 +319,7 @@ Game::~Game(){
 
 void Game::resume(){
     isPaused = false;
+    isKeyPressed = false;
 }
 
 void Game::setDir(Dir currentDir, Dir *dirs){
