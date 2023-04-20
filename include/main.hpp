@@ -2,21 +2,12 @@
 
 //marcos
 #define SDL_MAIN_HANDLED
-#define VERSION "v4.1"
+#define VERSION "v5.0"
 #define texWidth 16
 #define texHeight 16
 #define numFoodItemsSinglePlayer 2
-#define numFoodItemsMultiPlayer 2
+#define numFoodItemsMultiPlayer 3
 #define maxNumChainedMovesAllowed 3
-
-//for debugging purposes only
-#if defined(DEBUG_LINUX)
-#define realP "/home/slpirate/Commons/programming/C++/snake/"
-#elif defined(DEBUG_WIN)
-#define realP "F:\\programming\\c++\\snake\\"
-#else
-#define realP ""
-#endif
 
 //for debugging purposes
 #include <iostream>

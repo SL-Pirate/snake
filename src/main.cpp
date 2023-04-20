@@ -98,21 +98,43 @@ void cMain::startGame(){
         game->start();
     }
 }
+
+// for singleplayer mode
 void cMain::quit(){
-    if(!multiplayer){
-        outLabel = "Game Over\nYour Score: ";
-        outLabel << game->snake->getScore();
-        btn->SetLabel("Restart Singleplayer");
+    outLabel = "Game Over\nYour Score: ";
+    outLabel << game->snake->getScore();
+    btn->SetLabel("Restart Singleplayer");
+
+    out->SetLabel(outLabel);
+    btn1->Hide();
+    btn->Show();
+    btn2->Show();
+    this->Show();
+    game = nullptr;
+    t = nullptr;
+}
+// for multiplayer mode
+void cMain::quit(double penaltyPerCentForGameQuitOnMultiPlayer, BodyColor *snake){
+    winWidth = 496;
+    winHeight = 496;
+    outLabel = "Game Over\nRED's Score: ";
+    outLabel << game->snake1->getScore();
+    outLabel << "\nBLUE's Score: ";
+    outLabel << game->snake2->getScore();
+    std::string snake_color;
+    switch(*snake){
+        case RED:
+            snake_color = "RED";
+            break;
+        case BLUE:
+            snake_color = "BLUE";
+            break;
     }
-    else{
-        winWidth = 496;
-        winHeight = 496;
-        outLabel = "Game Over\nRED's Score: ";
-        outLabel << game->snake1->getScore();
-        outLabel << "\nBLUE's Score: ";
-        outLabel << game->snake2->getScore();
-        btn2->SetLabel("Restart Multiplayer\n(Chaotic Mode)");
-    }
+    outLabel << "\n" << penaltyPerCentForGameQuitOnMultiPlayer << "% penalty applied for " << snake_color;
+    delete(snake);
+    snake = nullptr;
+    btn2->SetLabel("Restart Multiplayer\n(Chaotic Mode)");
+
     out->SetLabel(outLabel);
     btn1->Hide();
     btn->Show();

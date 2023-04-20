@@ -4,7 +4,7 @@ Fonts::Fonts(Window *gameWin, std::string title, BodyColor color, int x, int y){
     this->gameWin  = gameWin;
     this->color = color;
 
-    font = TTF_OpenFont(realP "res/fonts/LiberationSans-Bold.ttf", 72);
+    font = TTF_OpenFont("res/fonts/LiberationSans-Bold.ttf", 72);
     // if (font == nullptr){
     //     std::cout << "could not load fonts " << SDL_GetError() << std::endl;
     // }

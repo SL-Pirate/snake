@@ -25,7 +25,7 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, BodyColo
     const char *filePath;
 
     if (color == RED){
-        filePath = realP "res/gfx/red.png";
+        filePath = "res/gfx/red.png";
         texture = gameWin->loadTexture(filePath); // res/gfx/body.png
         snake[0] = new GraphicItem(texture, (int) ROWS()/2, (int) COLS()/2, SNAKE);
         snake[1] = new GraphicItem(texture, (int) ROWS()/2 + 1, (int) COLS()/2, SNAKE);
@@ -36,7 +36,7 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, BodyColo
     }
     else if(color == BLUE){
         dir = left;
-        filePath = realP "res/gfx/blue.png";
+        filePath = "res/gfx/blue.png";
         texture = gameWin->loadTexture(filePath); // res/gfx/body.png
         snake[0] = new GraphicItem(texture, (int) ROWS()/2, (int) COLS()/2 + 1, SNAKE);
         snake[1] = new GraphicItem(texture, (int) ROWS()/2 + 1, (int) COLS()/2 + 1, SNAKE);
@@ -183,9 +183,4 @@ int Snake::getScore(){
 // apply a penalty for defined amount to the score as a percentage
 void Snake::applyPenalty(double penaltyPerCent){
     score -= (int) (score * penaltyPerCent / 100.0);
-}
-
-// apply a penalty of 10% to the score
-void Snake::applyPenalty(){
-    applyPenalty(10);
 }

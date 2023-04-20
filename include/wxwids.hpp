@@ -14,6 +14,7 @@ class cMain : public wxFrame{
 
     void pause();
     void quit();
+    void quit(double penaltyPerCentForGameQuitOnMultiPlayer, BodyColor *snake);
 
     private:
     wxButton* btn = nullptr;

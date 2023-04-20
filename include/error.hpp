@@ -20,10 +20,3 @@ class TTF_InitError : public std::exception{
     public:
     const char *what();
 };
-
-/*
-class SoundInitError : public std::exception{
-    public:
-    char *what();
-}
-*/

@@ -25,7 +25,7 @@ Game::Game(cMain *parent){
 
 void Game::start(){
     gameWin = new Window("Snake", winHeight + 44, winWidth);
-    background = gameWin->loadTexture(realP "res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
+    background = gameWin->loadTexture("res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
     foods = new Food*[numFoodItemsSinglePlayer];
 
     // arr[ROWS()][COLS()]
@@ -140,7 +140,7 @@ void Game::start(){
 
 void Game::startMultiplayer(){
     gameWin = new Window("Snake", winHeight + 44, winWidth);
-    background = gameWin->loadTexture(realP "res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
+    background = gameWin->loadTexture("res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
     foods = new Food*[numFoodItemsMultiPlayer];
 
     // arr[ROWS()][COLS()]
@@ -161,7 +161,7 @@ void Game::startMultiplayer(){
     //implementing snake & food
     snake1 = new Snake(gameWin, arr, parent->difficulty/*1000/parent->difficulty->GetValue()*/, RED);
     snake2 = new Snake(gameWin, arr, parent->difficulty/*1000/parent->difficulty->GetValue()*/, BLUE);
-    snake->setInitialDir(left);
+    snake2->setInitialDir(left);
     for (int i = 0; i < numFoodItemsMultiPlayer; i++){
         foods[i] = new Food(gameWin, arr);
     }
@@ -227,13 +227,13 @@ void Game::startMultiplayer(){
         //move the snake
         if (isKeyPressed){
             if (!isPaused){
-                if(snake1_moved){
+                if(*snake1_moved){
                     gameRunning = snake1->move(dir1);
                     *snake1_moved = false;
                     dir1 = resetDirs();
                 }
 
-                if(snake2_moved){
+                if(*snake2_moved){
                     gameRunning = snake2->move(dir2);
                     *snake2_moved = false;
                     dir2 = resetDirs();
@@ -243,11 +243,13 @@ void Game::startMultiplayer(){
         }
         else{
             if(!snake1->move()){
-                snake1->applyPenalty();
+                snake1->applyPenalty(penaltyPerCentForGameQuitOnMultiPlayer);
+                culpritSnake = new BodyColor(snake1->color);
                 gameRunning = false;
             }
             if(!snake2->move()){
-                snake2->applyPenalty();
+                snake2->applyPenalty(penaltyPerCentForGameQuitOnMultiPlayer);
+                culpritSnake = new BodyColor(snake2->color);
                 gameRunning = false;
             }
         }
@@ -279,7 +281,7 @@ void Game::startMultiplayer(){
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }
 
-    parent->quit();
+    parent->quit(penaltyPerCentForGameQuitOnMultiPlayer, culpritSnake);
     for (int i = 0; i < numFoodItemsMultiPlayer; i++){
         delete (foods[i]);
         foods[i] = nullptr;

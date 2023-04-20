@@ -3,7 +3,7 @@
 Food::Food(Window *gameWin, GraphicItem ***arr){
     this->arr = arr;
     this->gameWin = gameWin;
-    texture = gameWin->loadTexture(realP "res/gfx/egg.png");
+    texture = gameWin->loadTexture("res/gfx/egg.png");
 
     srand(time(0));
 

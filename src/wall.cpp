@@ -5,7 +5,7 @@
 Wall::Wall(Window *gameWin, GraphicItem ***arr){
     this->gameWin = gameWin;
     this->arr = arr;
-    texture = gameWin->loadTexture(realP "res/gfx/brick_wall23.png"); //res/gfx/brick_wall23.png
+    texture = gameWin->loadTexture("res/gfx/brick_wall23.png"); //res/gfx/brick_wall23.png
 
     for (int i = 0; i < COLS(); i++){
         arr[0][i] = new GraphicItem(texture, 0, i, WALL);

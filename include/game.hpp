@@ -22,6 +22,9 @@ class Game{
     Food **foods = nullptr;
     Wall *wall = nullptr;
     cMain *parent = nullptr;
+    int penaltyPerCentForGameQuitOnMultiPlayer = 10;
+    BodyColor *culpritSnake = nullptr;
+
     void setDir(Dir currentDir, Dir *dirs);
     void setDir(Dir currentDir, Dir *dirs, bool *snake_moved);
     Dir *resetDirs();
