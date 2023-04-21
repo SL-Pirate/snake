@@ -1,4 +1,4 @@
-#include "snake.hpp"
+#include "entity.hpp"
 
 GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id){
     this->texture = texture;

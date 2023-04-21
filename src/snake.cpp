@@ -1,4 +1,4 @@
-#include "snake.hpp"
+#include "entity.hpp"
 
 
 //Definition of class "Entity" 

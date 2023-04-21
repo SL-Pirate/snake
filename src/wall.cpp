@@ -1,5 +1,5 @@
 #include "main.hpp"
-#include "snake.hpp"
+#include "entity.hpp"
 #include "sdl_window.hpp"
 
 Wall::Wall(Window *gameWin, GraphicItem ***arr){

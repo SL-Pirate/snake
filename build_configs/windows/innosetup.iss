@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "snake"
-#define MyAppVersion "4.0"
+#define MyAppVersion "5.0"
 #define MyAppPublisher "alfatech"
 #define MyAppURL "https://www.github.com/SL-Pirate/snake"
 #define MyAppExeName "snake.exe"

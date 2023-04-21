@@ -1,6 +1,6 @@
 #include "main.hpp"
 #include "sdl_window.hpp"
-#include "snake.hpp"
+#include "entity.hpp"
 
 Window::Window(const char *title, int h, int w){
     win = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w ,h, SDL_WINDOW_SHOWN);

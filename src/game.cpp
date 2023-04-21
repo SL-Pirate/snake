@@ -1,6 +1,6 @@
 #include "game.hpp"
 #include "sdl_window.hpp"
-#include "snake.hpp"
+#include "entity.hpp"
 #include "error.hpp"
 #include "sound.hpp"
 

@@ -1,4 +1,4 @@
-#include "snake.hpp"
+#include "entity.hpp"
 
 Food::Food(Window *gameWin, GraphicItem ***arr){
     this->arr = arr;

@@ -1,6 +1,6 @@
 #include "wxwids.hpp"
 #include "game.hpp"
-#include "snake.hpp"
+#include "entity.hpp"
 #include "error.hpp"
 
 int main(int argc, char** argv){

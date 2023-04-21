@@ -1,4 +1,4 @@
-#include "snake.hpp"
+#include "entity.hpp"
 
 Fonts::Fonts(Window *gameWin, std::string title, BodyColor color, int x, int y){
     this->gameWin  = gameWin;
