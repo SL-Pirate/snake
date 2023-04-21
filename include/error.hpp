@@ -20,3 +20,10 @@ class TTF_InitError : public std::exception{
     public:
     const char *what();
 };
+
+class GridSpaceFullError : public std::exception{
+    std::string errMsg;
+
+    public:
+    const char *what();
+};

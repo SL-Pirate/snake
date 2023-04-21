@@ -105,8 +105,13 @@ void Game::start(){
         }
     
         //refresh food
-        for (int i = 0; i < numFoodItemsSinglePlayer; i++){
-            foods[i]->genFood();
+        try{
+            for (int i = 0; i < numFoodItemsSinglePlayer; i++){
+                foods[i]->genFood();
+            }
+        }
+        catch (GridSpaceFullError e) {
+            gameRunning = false;
         }
 
         //displaying everything on screen
@@ -255,8 +260,13 @@ void Game::startMultiplayer(){
         }
     
         //refresh food
-        for (int i = 0; i < numFoodItemsMultiPlayer; i++){
-            foods[i]->genFood();
+        try{
+            for (int i = 0; i < numFoodItemsMultiPlayer; i++){
+                foods[i]->genFood();
+            }
+        }
+        catch (GridSpaceFullError){
+            gameRunning = false;
         }
 
         //displaying everything on screen

@@ -1,4 +1,5 @@
 #include "entity.hpp"
+#include "error.hpp"
 
 Food::Food(Window *gameWin, GraphicItem ***arr){
     this->arr = arr;
@@ -22,12 +23,17 @@ void Food::genFood(){
             }
         }
 
-        int emptyCords[len_emptyCords][2];
+        if (len_emptyCords == 0){
+            throw GridSpaceFullError();
+        } 
+
+        int **emptyCords = new int*[len_emptyCords];
         int index_emptyCords = 0;
 
         for (int i = 0; i < ROWS(); i++){
             for (int j = 0; j < COLS(); j++){
                 if (arr[i][j] == nullptr){
+                    emptyCords[index_emptyCords] = new int[2];
                     emptyCords[index_emptyCords][0] = i;
                     emptyCords[index_emptyCords][1] = j;
                     index_emptyCords++;
@@ -45,6 +51,11 @@ void Food::genFood(){
 
         item = new GraphicItem(texture, cords[0], cords[1], FOOD, this);
         arr[cords[0]][cords[1]] = item;
+
+        for (int i = 0; i < len_emptyCords; i++){
+            delete(emptyCords[i]);
+        }
+        delete(emptyCords);
     }
 }
 

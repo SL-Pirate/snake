@@ -2,7 +2,7 @@
 
 //marcos
 #define SDL_MAIN_HANDLED
-#define VERSION "v5.0"
+#define VERSION "v5.2"
 #define texWidth 16
 #define texHeight 16
 #define numFoodItemsSinglePlayer 2

@@ -121,18 +121,20 @@ void cMain::quit(double penaltyPerCentForGameQuitOnMultiPlayer, BodyColor *snake
     outLabel << game->snake1->getScore();
     outLabel << "\nBLUE's Score: ";
     outLabel << game->snake2->getScore();
-    std::string snake_color;
-    switch(*snake){
-        case RED:
-            snake_color = "RED";
-            break;
-        case BLUE:
-            snake_color = "BLUE";
-            break;
+    if (snake != nullptr){
+        std::string snake_color;
+        switch(*snake){
+            case RED:
+                snake_color = "RED";
+                break;
+            case BLUE:
+                snake_color = "BLUE";
+                break;
+        }
+        outLabel << "\n" << penaltyPerCentForGameQuitOnMultiPlayer << "% penalty applied for " << snake_color;
+        delete(snake);
+        snake = nullptr;
     }
-    outLabel << "\n" << penaltyPerCentForGameQuitOnMultiPlayer << "% penalty applied for " << snake_color;
-    delete(snake);
-    snake = nullptr;
     btn2->SetLabel("Restart Multiplayer\n(Chaotic Mode)");
 
     out->SetLabel(outLabel);

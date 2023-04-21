@@ -11,3 +11,7 @@ const char *ImageInitError::what(){
 const char *TTF_InitError::what(){
     return "Failed to initialize SDL_ttf";
 }
+
+const char *GridSpaceFullError::what(){
+    return "No space left on grid";
+}

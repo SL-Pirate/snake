@@ -2,10 +2,11 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "snake"
-#define MyAppVersion "5.0"
+#define MyAppVersion "5.2"
 #define MyAppPublisher "alfatech"
 #define MyAppURL "https://www.github.com/SL-Pirate/snake"
 #define MyAppExeName "snake.exe"
+#define BuildLocation "F:\programming\C++\snake\build\Release\"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -38,12 +39,12 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "F:\programming\C++\snake\build\windows\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\build\windows\Release\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\build\windows\Release\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\build\windows\Release\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\build\windows\Release\SDL2_mixer.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\programming\C++\snake\build_configs\res\*"; DestDir: "{app}\res"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#BuildLocation}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildLocation}SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildLocation}SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildLocation}SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildLocation}SDL2_mixer.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildLocation}res\*"; DestDir: "{app}\res"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
