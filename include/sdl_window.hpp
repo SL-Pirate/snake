@@ -2,10 +2,11 @@
 
 class GraphicItem;
 
-class Window{
+class Window
+{
     SDL_Window *win = nullptr;
 
-    public:
+public:
     Window(const char *title, int h, int w);
     ~Window();
 
@@ -14,7 +15,7 @@ class Window{
     void render(SDL_Texture *texture);
     void render(GraphicItem *item);
     void display();
-    SDL_Texture *loadTexture(const char *filePath);
+    SDL_Texture *loadTexture(SDL_RWops *res);
 
     SDL_Renderer *ren = nullptr;
 };

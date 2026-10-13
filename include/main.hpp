@@ -12,6 +12,7 @@
 //for debugging purposes
 #include <iostream>
 
+#include <cmrc/cmrc.hpp>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
@@ -23,6 +24,7 @@
 #include <time.h>
 #include <wx/wx.h>
 
+CMRC_DECLARE(res);
 
 //ENUMs
 enum ID{WALL, SNAKE, FOOD};
@@ -40,4 +42,10 @@ inline const int ROWS(){
 //resolves to x
 inline const int COLS(){
     return winWidth / 16;
+}
+
+inline SDL_RWops* openRes(const std::string& name) {
+    auto fs = cmrc::res::get_filesystem();
+    auto file = fs.open(name);  // throws if the file doesn't exist
+    return SDL_RWFromConstMem(file.begin(), static_cast<int>(file.size()));
 }

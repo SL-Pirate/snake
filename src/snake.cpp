@@ -17,16 +17,16 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, BodyColo
     this->arr = arr;
     this->color = color;
     snake = new GraphicItem*[ROWS() * COLS()];
-    eatSound = new Sound("res/sfx/boom.wav");
-    dieSound = new Sound("res/sfx/aaaugh.wav");
+    eatSound = new Sound("sfx/boom.wav");
+    dieSound = new Sound("sfx/aaaugh.wav");
     registeredDirs = new Dir[maxNumChainedMovesAllowed];
     setInitialDir(right);
     
     const char *filePath;
 
     if (color == RED){
-        filePath = "res/gfx/red.png";
-        texture = gameWin->loadTexture(filePath); // res/gfx/body.png
+        filePath = "gfx/red.png";
+        texture = gameWin->loadTexture(openRes(filePath)); // res/gfx/body.png
         snake[0] = new GraphicItem(texture, (int) ROWS()/2, (int) COLS()/2, SNAKE);
         snake[1] = new GraphicItem(texture, (int) ROWS()/2 + 1, (int) COLS()/2, SNAKE);
 
@@ -36,8 +36,8 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, BodyColo
     }
     else if(color == BLUE){
         dir = left;
-        filePath = "res/gfx/blue.png";
-        texture = gameWin->loadTexture(filePath); // res/gfx/body.png
+        filePath = "gfx/blue.png";
+        texture = gameWin->loadTexture(openRes(filePath)); // res/gfx/body.png
         snake[0] = new GraphicItem(texture, (int) ROWS()/2, (int) COLS()/2 + 1, SNAKE);
         snake[1] = new GraphicItem(texture, (int) ROWS()/2 + 1, (int) COLS()/2 + 1, SNAKE);
 

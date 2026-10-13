@@ -25,7 +25,7 @@ Game::Game(cMain *parent){
 
 void Game::start(){
     gameWin = new Window("Snake", winHeight + 44, winWidth);
-    background = gameWin->loadTexture("res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
+    background = gameWin->loadTexture(openRes("gfx/grass-pattern.jpg")); // res/gfx/grass-pattern.jpg
     foods = new Food*[numFoodItemsSinglePlayer];
 
     // arr[ROWS()][COLS()]
@@ -145,7 +145,7 @@ void Game::start(){
 
 void Game::startMultiplayer(){
     gameWin = new Window("Snake", winHeight + 44, winWidth);
-    background = gameWin->loadTexture("res/gfx/grass-pattern.jpg"); // res/gfx/grass-pattern.jpg
+    background = gameWin->loadTexture(openRes("gfx/grass-pattern.jpg")); // res/gfx/grass-pattern.jpg
     foods = new Food*[numFoodItemsMultiPlayer];
 
     // arr[ROWS()][COLS()]

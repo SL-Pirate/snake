@@ -5,7 +5,7 @@ int Sound::volume = 128;
 
 Sound::Sound(std::string path){
     if(hasSound){
-        sfx = Mix_LoadWAV(path.c_str());
+        sfx = Mix_LoadWAV_RW(openRes(path.c_str()), 1);
     }
     if(sfx != nullptr){
         Mix_VolumeChunk(sfx, getVolume());
