@@ -66,7 +66,7 @@ conan install . --build=missing --output-folder=build \
   -c tools.system.package_manager:mode=install \
   -c tools.system.package_manager:sudo=True
 
-cmake .. -DCMAKE_TOOLCHAIN_FILE="conan_toolchain.cmake" -DCMAKE_BUILD_TYPE="release" 
+cmake .. -DCMAKE_TOOLCHAIN_FILE="Release/generators/conan_toolchain.cmake" -DCMAKE_BUILD_TYPE="release"
 cmake --build .
 ```
 
