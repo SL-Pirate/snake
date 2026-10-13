@@ -23,9 +23,10 @@
 ```sh
 git clone github.com/SL-Pirate/snake
 cd snake
-mkdir build
+run conan profile detect --force 
+conan install . --output-folder=build --build=missing
 cd build
-cmake ..
+cmake .. -DCMAKE_TOOLCHAIN_FILE="conan_toolchain.cmake" -DCMAKE_BUILD_TYPE="release"
 make
 ```
 ### To Run the program
