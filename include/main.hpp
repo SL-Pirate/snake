@@ -26,6 +26,8 @@
 
 CMRC_DECLARE(res);
 
+#define GAME_SCREEN_SCORE_HEIGHT_OFFSET 44
+
 //ENUMs
 enum ID{WALL, SNAKE, FOOD};
 //enums required to determine the direction of the movement of the snake

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "main.hpp"
+#include "sdl_window.hpp"
 
 class Game;
 
@@ -10,27 +11,28 @@ class cMain : public wxFrame{
     ~cMain();
 
     wxSlider *difficulty = nullptr;
-    static Game *game;
-
+    wxTimer m_timer;
+    
     void pause();
     void quit();
     void quit(double penaltyPerCentForGameQuitOnMultiPlayer, BodyColor *snake);
-
+    
     private:
+    Game *game = nullptr;
+    Window *gameWin = nullptr;
     wxButton* btn = nullptr;
     wxButton *btn1 = nullptr;
     wxButton *btn2 = nullptr;
     wxStaticText* out = nullptr;
     wxStaticText* in = nullptr;
     wxString outLabel = "\n\n\tScore goes here";
-    std::thread *t = nullptr;
     static bool multiplayer;
 
-    void start(wxCommandEvent &evt);
+    void startInternal();
+    void startSinglePlayer(wxCommandEvent &evt);
     void startMultiplayer(wxCommandEvent &evt);
     void onClose(wxCloseEvent &evt);
     void resume(wxCommandEvent &evt);
-    static void startGame();
 
     wxDECLARE_EVENT_TABLE();
 };

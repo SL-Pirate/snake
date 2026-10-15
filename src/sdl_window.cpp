@@ -4,7 +4,7 @@
 
 Window::Window(const char *title, int h, int w)
 {
-    win = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN);
+    win = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_HIDDEN | SDL_WINDOW_ALWAYS_ON_TOP);
 
     if (win == nullptr)
     {
@@ -23,6 +23,21 @@ Window::~Window()
 {
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
+}
+
+void Window::hide()
+{
+    SDL_HideWindow(win);
+}
+
+void Window::show()
+{
+    SDL_ShowWindow(win);
+}
+
+void Window::resize(int h, int w)
+{
+    SDL_SetWindowSize(win, w, h);
 }
 
 void Window::clearRen()

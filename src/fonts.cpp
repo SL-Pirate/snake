@@ -1,4 +1,5 @@
 #include "entity.hpp"
+#include "sdl_window.hpp"
 
 Fonts::Fonts(Window *gameWin, std::string title, BodyColor color, int x, int y)
 {

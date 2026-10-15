@@ -53,9 +53,9 @@ void Food::genFood(){
         arr[cords[0]][cords[1]] = item;
 
         for (int i = 0; i < len_emptyCords; i++){
-            delete(emptyCords[i]);
+            delete[](emptyCords[i]);
         }
-        delete(emptyCords);
+        delete[](emptyCords);
     }
 }
 

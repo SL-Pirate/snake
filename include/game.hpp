@@ -2,6 +2,7 @@
 
 #include "main.hpp"
 #include "wxwids.hpp"
+#include "sdl_window.hpp"
 
 class Window;
 class GraphicItem;
@@ -9,13 +10,13 @@ class Wall;
 class Snake;
 class Food;
 
-//defining class Game
-class Game{
-    private:
+// defining class Game
+class Game
+{
+private:
     Window *gameWin = nullptr;
     SDL_Texture *background = nullptr;
     GraphicItem ***arr = nullptr;
-    bool gameRunning = true;
     bool isKeyPressed = false;
     bool isPaused = false;
     SDL_Event evnt;
@@ -28,12 +29,15 @@ class Game{
     void setDir(Dir currentDir, Dir *dirs);
     void setDir(Dir currentDir, Dir *dirs, bool *snake_moved);
     Dir *resetDirs();
+    void singlePlayerEventHandler(wxTimerEvent& event);
+    void multiPlayerEventHandler(wxTimerEvent& event);
+    void stopGame(bool isMultiplayer);
 
-    public:
-    Game(cMain *parent);
+public:
+    Game(cMain *parent, Window *gameWin);
     ~Game();
 
-    void start();
+    void startSingleplayer();
     void startMultiplayer();
     void resume();
 

@@ -10,6 +10,9 @@ public:
     Window(const char *title, int h, int w);
     ~Window();
 
+    void hide();
+    void show();
+    void resize(int h, int w);
     void setBg();
     void clearRen();
     void render(SDL_Texture *texture);

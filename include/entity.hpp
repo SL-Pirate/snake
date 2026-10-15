@@ -1,9 +1,9 @@
 #pragma once
 
 #include "main.hpp"
-#include "sdl_window.hpp"
 #include "graphic_handler.hpp"
 #include "sound.hpp"
+#include "sdl_window.hpp"
 
 
 //parent class for all entities snake, wall and food
