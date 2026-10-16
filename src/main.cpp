@@ -3,6 +3,7 @@
 #include "entity.hpp"
 #include "error.hpp"
 #include "sdl_window.hpp"
+#include "net.hpp"
 #include "main.hpp"
 
 #include <enet/enet.h>
@@ -15,6 +16,12 @@ int main(int argc, char **argv) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         throw SDL_InitError();
         return -1;
+    }
+
+    if (enet_initialize() != 0) {
+        isNetworkingEnabled = false;
+    } else {
+        atexit(enet_deinitialize);
     }
 
     return wxEntry(argc, argv);
