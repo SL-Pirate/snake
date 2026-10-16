@@ -10,44 +10,36 @@
 #define maxNumChainedMovesAllowed 3
 
 //for debugging purposes
-#include <iostream>
-
 #include <cmrc/cmrc.hpp>
 #include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-#include <SDL_ttf.h>
-
-#include <thread>
-#include <chrono>
-#include <random>
-#include <time.h>
-#include <wx/wx.h>
 
 CMRC_DECLARE(res);
 
 #define GAME_SCREEN_SCORE_HEIGHT_OFFSET 44
 
 //ENUMs
-enum ID{WALL, SNAKE, FOOD};
+enum ID { WALL, SNAKE, FOOD };
+
 //enums required to determine the direction of the movement of the snake
-enum Dir{up, down, left, right, none};
-enum BodyColor{RED, BLUE};
+enum Dir { up, down, left, right, none };
+
+enum BodyColor { RED, BLUE };
 
 //global vars
 inline int winWidth = 496;
 inline int winHeight = 496;
 //resolves to y
-inline const int ROWS(){
+inline int ROWS() {
     return winHeight / 16;
 }
+
 //resolves to x
-inline const int COLS(){
+inline int COLS() {
     return winWidth / 16;
 }
 
-inline SDL_RWops* openRes(const std::string& name) {
-    auto fs = cmrc::res::get_filesystem();
-    auto file = fs.open(name);  // throws if the file doesn't exist
+inline SDL_RWops *openRes(const std::string &name) {
+    const auto fs = cmrc::res::get_filesystem();
+    const auto file = fs.open(name); // throws if the file doesn't exist
     return SDL_RWFromConstMem(file.begin(), static_cast<int>(file.size()));
 }

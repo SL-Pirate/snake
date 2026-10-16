@@ -3,29 +3,28 @@
 bool Sound::hasSound = false;
 int Sound::volume = 128;
 
-Sound::Sound(std::string path){
-    if(hasSound){
-        sfx = Mix_LoadWAV_RW(openRes(path.c_str()), 1);
+Sound::Sound(const std::string &path) {
+    if (hasSound) {
+        sfx = Mix_LoadWAV_RW(openRes(path), 1);
     }
-    if(sfx != nullptr){
+    if (sfx != nullptr) {
         Mix_VolumeChunk(sfx, getVolume());
-
     }
 }
 
-Sound::~Sound(){
+Sound::~Sound() {
     Mix_FreeChunk(sfx);
     sfx = nullptr;
 }
 
-void Sound::play(){
+void Sound::play() const {
     Mix_PlayChannel(-1, sfx, 0);
 }
 
-void Sound::setVolume(int volume){
-    this->volume = volume / 100 * 128;
+void Sound::setVolume(const int pVolume) {
+    volume = pVolume / 100 * 128;
 }
 
-int Sound::getVolume(){
+int Sound::getVolume() {
     return volume / 128 * 100;
 }

@@ -5,20 +5,25 @@
 #include "sound.hpp"
 #include "sdl_window.hpp"
 
+#include <wx/wx.h>
+#include <array>
+#include <SDL_ttf.h>
+#include <random>
 
 //parent class for all entities snake, wall and food
-class Entity{
-    protected:
+class Entity {
+protected:
     Window *gameWin = nullptr;
     SDL_Texture *texture = nullptr;
     //GraphicItem *arr[ROWS()][COLS()];
     GraphicItem ***arr = nullptr;
     //used for passing food entities to set them to null so food can be regenerated if eaten
     GraphicItem *item = nullptr;
-    
-    public:
+
+public:
     Entity();
-    ~Entity();
+
+    virtual ~Entity();
 
     //used for passing food entities to set them to null so food can be regenerated if eaten
     virtual void clearItem() = 0;
@@ -35,15 +40,18 @@ class Fonts : public Entity {
     std::string title;
     BodyColor color;
 
-    public:
+public:
     //int x = horizontal position of the label
     //int y = vertical position of the label
-    Fonts(Window *gameWin, std::string title, BodyColor color, int x, int y);
-    ~Fonts();
-    
-    void setTitle(std::string title);
-    void clearItem();
-    GraphicItem *getItem();
+    Fonts(Window *gameWin, const std::string &title, BodyColor color, int x, int y);
+
+    ~Fonts() override;
+
+    void setTitle(const std::string &pTitle);
+
+    void clearItem() override;
+
+    [[nodiscard]] GraphicItem *getItem() const;
 };
 
 
@@ -57,24 +65,31 @@ class Snake : public Entity {
     int score = 0;
     wxSlider *difficulty = nullptr;
     std::string scoreTitle;
-    Sound* eatSound;
-    Sound* dieSound;
+    Sound *eatSound;
+    Sound *dieSound;
 
     void ate(GraphicItem *nextItem);
-    void clearItem();
-    Dir getNextDir();
-    
-    public:
-    Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, BodyColor color);
-    ~Snake();
 
-    void addToArr();
+    Dir getNextDir() const;
+
+public:
+    Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, BodyColor color);
+
+    ~Snake() override;
+
+    void clearItem() override;
+
+    void addToArr() const;
+
     bool move();
+
     bool move(Dir *dirs);
-    void setInitialDir(Dir dir);
-    int getScore();
+
+    void setInitialDir(Dir pDir) const;
+
+    int getScore() const;
+
     void applyPenalty(double penaltyPerCent);
-    void applyPenalty();
 
     Fonts *font = nullptr;
     BodyColor color;
@@ -83,21 +98,23 @@ class Snake : public Entity {
 
 //definition of the class Wall, child of entity 
 class Wall : public Entity {
-    void clearItem();
-    public:
+public:
     Wall(Window *gameWin, GraphicItem ***arr);
+
+    void clearItem() override;
 };
 
 
 //definition of the class Food, child of entity
 class Food : public Entity {
-    int cords[2];
-    void genCords();
+    static std::mt19937 gen;
+    std::array<int, 2> cords = {};
 
-    public:
+public:
     Food(Window *gameWin, GraphicItem ***arr);
 
-
     void genFood();
-    void clearItem();
+
+    void clearItem() override;
+
 };

@@ -1,15 +1,14 @@
 #include "entity.hpp"
 #include "sdl_window.hpp"
 
-Fonts::Fonts(Window *gameWin, std::string title, BodyColor color, int x, int y)
-{
+Fonts::Fonts(Window *gameWin, const std::string &title, const BodyColor color, const int x, const int y) {
     this->gameWin = gameWin;
     this->color = color;
 
     font = TTF_OpenFontRW(openRes("fonts/LiberationSans-Bold.ttf"), 1, 72);
-    // if (font == nullptr){
-    //     std::cout << "could not load fonts " << SDL_GetError() << std::endl;
-    // }
+    if (font == nullptr) {
+        std::cout << "could not load fonts " << SDL_GetError() << std::endl;
+    }
 
     dst = new SDL_Rect();
     dst->h = 25;
@@ -20,33 +19,28 @@ Fonts::Fonts(Window *gameWin, std::string title, BodyColor color, int x, int y)
     setTitle(title);
 }
 
-Fonts::~Fonts()
-{
-    font = nullptr;
+Fonts::~Fonts() {
     delete (dst);
     dst = nullptr;
 }
 
-void Fonts::setTitle(std::string title)
-{
-    this->title = title;
+void Fonts::setTitle(const std::string &pTitle) {
+    this->title = pTitle;
 
-    if (texture != nullptr)
-    {
+    if (texture != nullptr) {
         texture = nullptr;
     }
 
     SDL_Surface *textSurf = nullptr;
-    switch (color)
-    {
-    case RED:
-        textSurf = TTF_RenderText_Blended(font, title.c_str(), {225, 0, 0});
-        break;
-    case BLUE:
-        textSurf = TTF_RenderText_Blended(font, title.c_str(), {0, 0, 225});
-        break;
-    default:
-        textSurf = TTF_RenderText_Blended(font, title.c_str(), {225, 0, 0});
+    switch (color) {
+        case RED:
+            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {225, 0, 0});
+            break;
+        case BLUE:
+            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {0, 0, 225});
+            break;
+        default:
+            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {225, 0, 0});
     }
 
     texture = SDL_CreateTextureFromSurface(gameWin->ren, textSurf);
@@ -57,12 +51,10 @@ void Fonts::setTitle(std::string title)
     item = new GraphicItem(texture, dst);
 }
 
-void Fonts::clearItem()
-{
+void Fonts::clearItem() {
     delete (item);
 }
 
-GraphicItem *Fonts::getItem()
-{
+GraphicItem *Fonts::getItem() const {
     return item;
 }

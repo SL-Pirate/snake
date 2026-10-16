@@ -3,11 +3,16 @@
 #include "entity.hpp"
 #include "error.hpp"
 #include "sdl_window.hpp"
+#include "main.hpp"
 
-int main(int argc, char **argv)
-{
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
-    {
+#include <enet/enet.h>
+#include <SDL_image.h>
+#include <thread>
+#include <random>
+#include <wx/wx.h>
+
+int main(int argc, char **argv) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         throw SDL_InitError();
         return -1;
     }
@@ -17,13 +22,12 @@ int main(int argc, char **argv)
 
 wxBEGIN_EVENT_TABLE(cMain, wxFrame)
     EVT_BUTTON(1010, cMain::startSinglePlayer)
-        EVT_BUTTON(1011, cMain::startMultiplayer)
-            EVT_BUTTON(1012, cMain::resume)
-                EVT_CLOSE(cMain::onClose)
-                    wxEND_EVENT_TABLE()
+    EVT_BUTTON(1011, cMain::startMultiplayer)
+    EVT_BUTTON(1012, cMain::resume)
+    EVT_CLOSE(cMain::onClose)
+wxEND_EVENT_TABLE();
 
-                        cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Snake " VERSION, wxPoint(250, 50), wxSize(400, 400))
-{
+cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Snake " VERSION, wxPoint(250, 50), wxSize(400, 400)) {
 #ifdef _WIN32
     this->SetBackgroundColour(*wxWHITE);
 #endif
@@ -31,7 +35,8 @@ wxBEGIN_EVENT_TABLE(cMain, wxFrame)
     gameWin->hide();
     game = game = new Game(this, gameWin);
     this->Center();
-    in = new wxStaticText(this, wxID_ANY, "welcome to the Snake Game\nPlease set difficulty:", wxPoint(50, 30), wxSize(300, 50), wxALIGN_CENTER);
+    in = new wxStaticText(this, wxID_ANY, "welcome to the Snake Game\nPlease set difficulty:", wxPoint(50, 30),
+                          wxSize(300, 50), wxALIGN_CENTER);
     difficulty = new wxSlider(this, 1009, 10, 1, 20, wxPoint(50, 100), wxSize(300, 50));
     btn = new wxButton(this, 1010, "Start Singleplayer", wxPoint(33, 170), wxSize(150, 50));
     btn2 = new wxButton(this, 1011, "Start Multiplayer\n(Chaotic Mode)", wxPoint(217, 170), wxSize(150, 70));
@@ -41,8 +46,7 @@ wxBEGIN_EVENT_TABLE(cMain, wxFrame)
     out->Hide();
 }
 
-cMain::~cMain()
-{
+cMain::~cMain() {
     delete (difficulty);
     delete (game);
     delete (gameWin);
@@ -52,10 +56,8 @@ cMain::~cMain()
     delete (in);
 }
 
-void cMain::startInternal()
-{
-    try
-    {
+void cMain::startInternal() {
+    try {
         btn->Hide();
         btn2->Hide();
         btn1->Show();
@@ -63,31 +65,23 @@ void cMain::startInternal()
         this->Hide();
         gameWin->show();
 
-        if (multiplayer)
-        {
+        if (multiplayer) {
             game->startMultiplayer();
-        }
-        else
-        {
+        } else {
             game->startSingleplayer();
         }
-    }
-    catch (ImageInitError e)
-    {
+    } catch (ImageInitError &e) {
         outLabel = "";
         outLabel << e.what();
         out->SetLabel(outLabel);
-    }
-    catch (TTF_InitError e)
-    {
+    } catch (TTF_InitError &e) {
         outLabel = "";
         outLabel << e.what();
         out->SetLabel(outLabel);
     }
 }
 
-void cMain::startSinglePlayer(wxCommandEvent &evt)
-{
+void cMain::startSinglePlayer(wxCommandEvent &) {
     multiplayer = false;
     winHeight = 496;
     winWidth = 496;
@@ -95,8 +89,7 @@ void cMain::startSinglePlayer(wxCommandEvent &evt)
     startInternal();
 }
 
-void cMain::startMultiplayer(wxCommandEvent &evt)
-{
+void cMain::startMultiplayer(wxCommandEvent &) {
     multiplayer = true;
     winWidth = 592;
     winHeight = 592;
@@ -104,30 +97,25 @@ void cMain::startMultiplayer(wxCommandEvent &evt)
     startInternal();
 }
 
-void cMain::resume(wxCommandEvent &evt)
-{
+void cMain::resume(wxCommandEvent &) {
     this->Hide();
     gameWin->show();
     game->resume();
 }
 
-void cMain::onClose(wxCloseEvent &evt)
-{
+// ReSharper disable once CppMemberFunctionMayBeConst
+void cMain::onClose(wxCloseEvent &) {
     delete (this);
     exit(EXIT_SUCCESS);
 }
 
-void cMain::pause()
-{
+void cMain::pause() {
     this->Show();
     gameWin->hide();
-    if (!multiplayer)
-    {
+    if (!multiplayer) {
         outLabel = "Your Score: ";
         outLabel << game->snake->getScore();
-    }
-    else
-    {
+    } else {
         outLabel = "RED's Score: ";
         outLabel << game->snake1->getScore();
         outLabel << "\nBLUE's Score: ";
@@ -137,8 +125,7 @@ void cMain::pause()
 }
 
 // for singleplayer mode
-void cMain::quit()
-{
+void cMain::quit() {
     outLabel = "Game Over\nYour Score: ";
     outLabel << game->snake->getScore();
     btn->SetLabel("Restart Singleplayer");
@@ -152,26 +139,23 @@ void cMain::quit()
 }
 
 // for multiplayer mode
-void cMain::quit(double penaltyPerCentForGameQuitOnMultiPlayer, BodyColor *snake)
-{
+void cMain::quit(double penaltyPerCentForGameQuitOnMultiPlayer, const BodyColor *snake) {
     outLabel = "Game Over\nRED's Score: ";
     outLabel << game->snake1->getScore();
     outLabel << "\nBLUE's Score: ";
     outLabel << game->snake2->getScore();
-    if (snake != nullptr)
-    {
+    if (snake != nullptr) {
         std::string snake_color;
-        switch (*snake)
-        {
-        case RED:
-            snake_color = "RED";
-            break;
-        case BLUE:
-            snake_color = "BLUE";
-            break;
+        switch (*snake) {
+            case RED:
+                snake_color = "RED";
+                break;
+            case BLUE:
+                snake_color = "BLUE";
+                break;
         }
         outLabel << "\n"
-                 << penaltyPerCentForGameQuitOnMultiPlayer << "% penalty applied for " << snake_color;
+                << penaltyPerCentForGameQuitOnMultiPlayer << "% penalty applied for " << snake_color;
         delete (snake);
         snake = nullptr;
     }
@@ -188,11 +172,9 @@ void cMain::quit(double penaltyPerCentForGameQuitOnMultiPlayer, BodyColor *snake
 bool cMain::multiplayer = false;
 
 // Starting point of the program
-bool cApp::OnInit()
-{
-    main = new cMain();
+bool cApp::OnInit() {
+    const auto main = new cMain();
     main->Show();
-
     return true;
 }
 

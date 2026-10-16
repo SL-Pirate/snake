@@ -1,6 +1,6 @@
 #include "entity.hpp"
 
-GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id){
+GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id) {
     this->texture = texture;
     this->id = id;
 
@@ -16,10 +16,11 @@ GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id){
     dst->x = x * dst->w;
     dst->y = y * dst->h;
 
-    setPos(x, y);
+    this->x = x * dst->w;
+    this->y = y * dst->h;
 }
 
-GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id, Entity *parent){
+GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id, Entity *parent) {
     this->texture = texture;
     this->id = id;
     this->parent = parent;
@@ -36,33 +37,34 @@ GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id, Entity *pare
     dst->x = x * dst->w;
     dst->y = y * dst->h;
 
-    setPos(x, y);
+    this->x = x * dst->w;
+    this->y = y * dst->h;
 }
 
-GraphicItem::GraphicItem(SDL_Texture *texture, SDL_Rect *dst){
+GraphicItem::GraphicItem(SDL_Texture *texture, SDL_Rect *dst) : x(0), y(0), id() {
     this->texture = texture;
 
     this->dst = dst;
 }
 
-GraphicItem::~GraphicItem(){
+GraphicItem::~GraphicItem() {
     delete (pos);
     delete (org);
     delete (dst);
 }
 
-void GraphicItem::setPos(int x, int y){
-    this->x = x * dst->w;
-    this->y = y * dst->h;
+void GraphicItem::setPos(const int pX, const int pY) {
+    this->x = pX * dst->w;
+    this->y = pY * dst->h;
 }
 
-int *GraphicItem::getPos(){
+int *GraphicItem::getPos() {
     pos = new int[2];
     pos[0] = x / dst->w;
     pos[1] = y / dst->h;
     return pos;
 }
 
-void GraphicItem::rmFromParent(){
+void GraphicItem::rmFromParent() const {
     parent->clearItem();
 }

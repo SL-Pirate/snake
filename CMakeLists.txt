@@ -13,6 +13,7 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_mixer REQUIRED)
+find_package(enet REQUIRED)
 
 add_executable(snake ${SOURCES})
 
@@ -26,5 +27,6 @@ target_link_libraries(snake PRIVATE
     sdl_ttf::sdl_ttf
     SDL2_mixer::SDL2_mixer
     wxWidgets::wxWidgets
+    enet::enet
     snake_res
 )
