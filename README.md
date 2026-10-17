@@ -36,8 +36,6 @@ git clone https://github.com/SL-Pirate/snake
 cd snake
 conan profile detect --force
 conan install . --build=missing
-cmake --preset conan-release
-cmake --build --preset conan-release
 ```
 
 Notes:
@@ -69,6 +67,50 @@ conan install . --build=missing --output-folder=build \
 cmake .. -DCMAKE_TOOLCHAIN_FILE="Release/generators/conan_toolchain.cmake" -DCMAKE_BUILD_TYPE="release"
 cmake --build .
 ```
+
+If `gettext` fails to compile, install it from your distro's package manager and tell Conan to use the system copy.
+Add this to your Conan profile (`~/.conan2/profiles/default`):
+
+```ini
+[conf]
+tools.system.package_manager:mode=true
+tools.system.package_manager:sudo=True
+
+[platform_requires]
+gettext/0.26
+
+[platform_tool_requires]
+gettext/0.26
+```
+
+### FreeBSD
+
+Conan's wxWidgets build does not work on FreeBSD. Install wxWidgets from ports instead and tell Conan to use the system copy:
+
+```sh
+pkg install wx32-gtk3
+```
+
+Then add this to your Conan profile (`~/.conan2/profiles/default`):
+
+```ini
+[conf]
+tools.system.package_manager:mode=install
+tools.system.package_manager:sudo=True
+tools.gnu:make_program=gmake
+wxwidgets/*:tools.cmake.cmaketoolchain:extra_variables={"wxUSE_EPOLL_DISPATCHER": "OFF"}
+
+[platform_tool_requires]
+cmake/3.31.12
+
+[replace_requires]
+wxwidgets/*: wxwidgets/3.3.2
+
+[platform_requires]
+wxwidgets/3.3.2
+```
+
+`replace_requires` swaps the version pinned in `conanfile.txt` for the one installed from ports.
 
 ## Running
 
