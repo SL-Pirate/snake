@@ -5,7 +5,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(Snake)
 
 include(cmake/CMakeRC.cmake)
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 file(GLOB_RECURSE RES_FILES CONFIGURE_DEPENDS "res/*")
 
 find_package(wxWidgets COMPONENTS core base REQUIRED)
@@ -14,7 +14,8 @@ find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 
-add_executable(snake ${SOURCES})
+add_executable(snake ${SOURCES}
+        src/networking/host.cpp)
 
 target_include_directories(snake PRIVATE include)
 

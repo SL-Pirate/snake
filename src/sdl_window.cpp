@@ -1,4 +1,5 @@
 #include <SDL_image.h>
+#include <iostream>
 
 #include "sdl_window.hpp"
 #include "entity.hpp"
@@ -8,13 +9,14 @@ Window::Window(const char *title, int h, int w) {
                            SDL_WINDOW_HIDDEN | SDL_WINDOW_ALWAYS_ON_TOP);
 
     if (win == nullptr) {
-        // std::cout << "Window initialization failed! \nError: " << SDL_GetError() << std::endl;
+        throw std::runtime_error(std::string("Window initialization failed! \nError: ").append(SDL_GetError()).c_str());
     }
 
     ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
     if (ren == nullptr) {
-        // std::cout << "Renderer initialization failed! \nError: " << SDL_GetError() << std::endl;
+        throw std::runtime_error(
+            std::string("Renderer initialization failed! \nError: ").append(SDL_GetError()).c_str());
     }
 }
 

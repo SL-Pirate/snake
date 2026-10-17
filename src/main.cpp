@@ -3,7 +3,7 @@
 #include "entity.hpp"
 #include "error.hpp"
 #include "sdl_window.hpp"
-#include "net.hpp"
+#include "net_base.hpp"
 #include "main.hpp"
 
 #include <SDL_image.h>

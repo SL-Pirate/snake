@@ -1,4 +1,4 @@
-#include "net.hpp"
+#include "net_base.hpp"
 
 Payload::Payload(const std::vector<std::array<int, 2> > &snake, const unsigned int score, std::array<int, 2> *ate_fruit)
     : snake(snake),
