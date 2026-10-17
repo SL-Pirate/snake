@@ -5,7 +5,6 @@
 #include "sdl_window.hpp"
 #include "main.hpp"
 
-#include <enet/enet.h>
 #include <SDL_image.h>
 #include <thread>
 #include <random>
