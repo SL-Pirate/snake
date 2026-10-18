@@ -121,3 +121,26 @@ All resources (fonts, images, sounds) are compiled into the executable. The bina
 ```
 
 On Windows run `build\Release\snake.exe`.
+
+## FAQ
+
+### Build fails with `SDL.h: No such file or directory`
+
+`conan install` ran fine, but compiling stops at the first `#include <SDL.h>`, sometimes with wxWidgets headers missing too.
+
+This means CMake was configured with a build type that Conan did not generate for. Conan's CMake files only fill in the dependency targets when `CMAKE_BUILD_TYPE` matches the configuration you installed (`Release` by default). Any other value is accepted without complaint: `find_package` still reports success, but the targets carry no include paths or libraries, so the headers are never found.
+
+Check what your build directory was configured with:
+
+```sh
+grep CMAKE_BUILD_TYPE build/CMakeCache.txt
+```
+
+If it is not `Release` (a typo, a paste cut short by your terminal, or `Debug` without a matching `conan install -s build_type=Debug`), reconfigure. The simplest fix is the preset, which sets the build type for you:
+
+```sh
+cmake --preset conan-release
+cmake --build --preset conan-release
+```
+
+If you prefer the manual commands from the Linux section, pass `-DCMAKE_BUILD_TYPE=Release` explicitly. Re-running configure overwrites the cached value, so there is no need to delete the build directory.

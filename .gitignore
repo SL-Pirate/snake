@@ -19,3 +19,4 @@ TODO
 /build_configs/linux/appimage/snake.AppDir/usr/bin/snake
 /build_configs/linux/appimage/snake.AppDir/.DirIcon
 .venv/
+CMakeUserPresets.json
