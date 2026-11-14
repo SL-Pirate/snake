@@ -28,7 +28,8 @@ Game::Game(cMain *parent, Window *gameWin) {
 
 void Game::startSingleplayer() {
     background = gameWin->loadTexture(openRes("gfx/grass-pattern.png")); // res/gfx/grass-pattern.png
-    foods = new Food *[NUM_FOOD_ITEMS_SINGLE_PLAYER];
+    // foods = new Food *[NUM_FOOD_ITEMS_SINGLE_PLAYER];
+    foodContainer = std::make_unique<FoodContainer>(NUM_FOOD_ITEMS_SINGLE_PLAYER);
 
     // arr[ROWS()][COLS()]
     // equates to arr[y][x]
@@ -43,12 +44,13 @@ void Game::startSingleplayer() {
         }
     }
 
-    wall = new Wall(gameWin, &arr);
+    wall = std::make_unique<Wall>(gameWin, &arr);
 
     // implementing snake & food
-    snake = new Snake(gameWin, &arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, RED);
+    snake = std::make_unique<Snake>(gameWin, &arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, RED);
     for (int i = 0; i < NUM_FOOD_ITEMS_SINGLE_PLAYER; i++) {
-        foods[i] = new Food(gameWin, &arr);
+        // foodContainer.get()[i] = new Food(gameWin, &arr);
+        (*foodContainer)[i] = std::make_unique<Food>(gameWin, &arr);
     }
 
     parent->m_timer.Bind(wxEVT_TIMER, &Game::singlePlayerEventHandler, this);
@@ -108,7 +110,7 @@ void Game::singlePlayerEventHandler(wxTimerEvent &) {
     // refresh food
     try {
         for (int i = 0; i < NUM_FOOD_ITEMS_SINGLE_PLAYER; i++) {
-            foods[i]->genFood();
+            (*foodContainer)[i]->genFood();
         }
     } catch (GridSpaceFullError &) {
         canKeepGoing = false;
@@ -133,7 +135,7 @@ void Game::singlePlayerEventHandler(wxTimerEvent &) {
 
 void Game::startMultiplayer() {
     background = gameWin->loadTexture(openRes("gfx/grass-pattern.png")); // res/gfx/grass-pattern.png
-    foods = new Food *[NUM_FOOD_ITEMS_MULTI_PLAYER];
+    foodContainer = std::make_unique<FoodContainer>(NUM_FOOD_ITEMS_MULTIPLAYER);
 
     // arr[ROWS()][COLS()]
     // equates to arr[y][x]
@@ -148,14 +150,14 @@ void Game::startMultiplayer() {
         }
     }
 
-    wall = new Wall(gameWin, &arr);
+    wall = std::make_unique<Wall>(gameWin, &arr);
 
     // implementing snake & food
-    snake1 = new Snake(gameWin, &arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, RED);
-    snake2 = new Snake(gameWin, &arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, BLUE);
+    snake1 = std::make_unique<Snake>(gameWin, &arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, RED);
+    snake2 = std::make_unique<Snake>(gameWin, &arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, BLUE);
     snake2->setInitialDir(left);
-    for (int i = 0; i < NUM_FOOD_ITEMS_MULTI_PLAYER; i++) {
-        foods[i] = new Food(gameWin, &arr);
+    for (int i = 0; i < NUM_FOOD_ITEMS_MULTIPLAYER; i++) {
+        (*foodContainer)[i] = std::make_unique<Food>(gameWin, &arr);
     }
 
     parent->m_timer.Bind(wxEVT_TIMER, &Game::multiPlayerEventHandler, this);
@@ -253,8 +255,8 @@ void Game::multiPlayerEventHandler(wxTimerEvent &event) {
 
     // refresh food
     try {
-        for (int i = 0; i < NUM_FOOD_ITEMS_MULTI_PLAYER; i++) {
-            foods[i]->genFood();
+        for (int i = 0; i < NUM_FOOD_ITEMS_MULTIPLAYER; i++) {
+            (*foodContainer)[i]->genFood();
         }
     } catch (GridSpaceFullError &) {
         canKeepGoing = false;
@@ -279,7 +281,7 @@ void Game::multiPlayerEventHandler(wxTimerEvent &event) {
     gameWin->display();
 }
 
-void Game::stopGame(bool isMultiplayer) {
+void Game::stopGame(const bool isMultiplayer) const {
     if (parent->m_timer.IsRunning()) {
         parent->m_timer.Stop();
     }
@@ -292,12 +294,6 @@ void Game::stopGame(bool isMultiplayer) {
 
         gameWin->clearRen();
         parent->quit(penaltyPerCentForGameQuitOnMultiPlayer, culpritSnake);
-        for (int i = 0; i < NUM_FOOD_ITEMS_MULTI_PLAYER; i++) {
-            delete (foods[i]);
-            foods[i] = nullptr;
-        }
-        delete[] foods;
-        foods = nullptr;
     } else {
         // waiting for the game over music to finish (only if exists)
         if (Sound::hasSound) {
@@ -306,12 +302,6 @@ void Game::stopGame(bool isMultiplayer) {
 
         gameWin->clearRen();
         parent->quit();
-        for (int i = 0; i < NUM_FOOD_ITEMS_SINGLE_PLAYER; i++) {
-            delete (foods[i]);
-            foods[i] = nullptr;
-        }
-        delete[] foods;
-        foods = nullptr;
     }
 }
 
@@ -320,14 +310,6 @@ Game::~Game() {
     gameWin = nullptr;
     SDL_DestroyTexture(background);
     background = nullptr;
-    delete (snake);
-    snake = nullptr;
-    delete (snake1);
-    snake1 = nullptr;
-    delete (snake2);
-    snake2 = nullptr;
-    delete (wall);
-    wall = nullptr;
 
     Mix_CloseAudio();
     IMG_Quit();

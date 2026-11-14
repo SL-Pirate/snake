@@ -11,6 +11,8 @@ class Wall;
 class Snake;
 class Food;
 
+typedef std::vector<std::unique_ptr<Food> > FoodContainer;
+
 // defining class Game
 class Game {
     Window *gameWin = nullptr;
@@ -18,8 +20,8 @@ class Game {
     Arena arr;
     bool isKeyPressed = false;
     bool isPaused = false;
-    Food **foods = nullptr;
-    Wall *wall = nullptr;
+    std::unique_ptr<FoodContainer> foodContainer = nullptr;
+    std::unique_ptr<Wall> wall = nullptr;
     cMain *parent = nullptr;
     int penaltyPerCentForGameQuitOnMultiPlayer = 10;
     BodyColor *culpritSnake = nullptr;
@@ -34,7 +36,7 @@ class Game {
 
     void multiPlayerEventHandler(wxTimerEvent &event);
 
-    void stopGame(bool isMultiplayer);
+    void stopGame(bool isMultiplayer) const;
 
 public:
     Game(cMain *parent, Window *gameWin);
@@ -47,7 +49,7 @@ public:
 
     void resume();
 
-    Snake *snake = nullptr;
-    Snake *snake1 = nullptr;
-    Snake *snake2 = nullptr;
+    std::unique_ptr<Snake> snake = nullptr;
+    std::unique_ptr<Snake> snake1 = nullptr;
+    std::unique_ptr<Snake> snake2 = nullptr;
 };
