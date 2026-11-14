@@ -27,15 +27,13 @@ void Food::genFood() {
             throw GridSpaceFullError();
         }
 
-        int **emptyCords = new int *[len_emptyCords];
+        auto emptyCords = std::vector<std::unique_ptr<Pos> >(len_emptyCords);
         int index_emptyCords = 0;
 
         for (int i = 0; i < ROWS(); i++) {
             for (int j = 0; j < COLS(); j++) {
                 if ((*arr)[i][j] == nullptr) {
-                    emptyCords[index_emptyCords] = new int[2];
-                    emptyCords[index_emptyCords][0] = i;
-                    emptyCords[index_emptyCords][1] = j;
+                    emptyCords[index_emptyCords] = std::make_unique<Pos>(i, j);
                     index_emptyCords++;
 
                     if (index_emptyCords == len_emptyCords) {
@@ -48,16 +46,11 @@ void Food::genFood() {
         std::uniform_int_distribution distrib(0, len_emptyCords - 1);
         const int lucky_index = distrib(gen);
 
-        cords = {emptyCords[lucky_index][0], emptyCords[lucky_index][1]};
+        cords = std::move(emptyCords[lucky_index]);
 
         // item = new GraphicItem(texture, cords[0], cords[1], FOOD, this);
-        item = std::make_shared<GraphicItem>(texture, cords[0], cords[1], FOOD, this);
-        (*arr)[cords[0]][cords[1]] = item;
-
-        for (int i = 0; i < len_emptyCords; i++) {
-            delete[](emptyCords[i]);
-        }
-        delete[](emptyCords);
+        item = std::make_shared<GraphicItem>(texture, cords->getX(), cords->getY(), FOOD, this);
+        (*arr)[cords->getX()][cords->getY()] = item;
     }
 }
 

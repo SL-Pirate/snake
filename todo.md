@@ -20,11 +20,11 @@ In order of implementation.
     - Convert to: `std::array` or `std::vector<Dir>`
     - Fixes: `src/snake.cpp:134` uses `delete` on an array (needs `delete[]`).
 
-- [ ] **4. Local heap values**: `snake1_moved`, `snake2_moved`, `culpritSnake`
+- [x] **4. Local heap values**: `snake1_moved`, `snake2_moved`, `culpritSnake`
     - Where: `src/game.cpp:169-170`, `:244`, `:249`
     - Convert to: plain `bool`, and `std::optional<BodyColor>`
 
-- [ ] **5. `emptyCords`**
+- [x] **5. `emptyCords`**
     - Where: `src/food.cpp:30-60`
     - Convert to: `std::vector<std::array<int, 2>>`
 

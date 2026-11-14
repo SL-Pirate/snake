@@ -107,7 +107,7 @@ public:
 //definition of the class Food, child of entity
 class Food : public Entity {
     static std::mt19937 gen;
-    std::array<int, 2> cords = {};
+    std::unique_ptr<Pos> cords = nullptr;
 
 public:
     Food(Window *gameWin, Arena *arr);
