@@ -10,8 +10,8 @@ class GraphicItem {
     Entity *parent = nullptr;
 
 public:
-    SDL_Rect *org = nullptr;
-    SDL_Rect *dst = nullptr;
+    std::unique_ptr<SDL_Rect> org = nullptr;
+    std::shared_ptr<SDL_Rect> dst = nullptr;
     SDL_Texture *texture = nullptr;
     ID id;
 
@@ -19,9 +19,7 @@ public:
 
     GraphicItem(SDL_Texture *texture, int y, int x, ID id, Entity *parent);
 
-    GraphicItem(SDL_Texture *texture, SDL_Rect *dst);
-
-    ~GraphicItem();
+    GraphicItem(SDL_Texture *texture, const std::shared_ptr<SDL_Rect> &dst);
 
     /**takes positions of x and y in "In Game Units*" 
     

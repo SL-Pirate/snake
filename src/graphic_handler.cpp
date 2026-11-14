@@ -4,13 +4,13 @@ GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id) {
     this->texture = texture;
     this->id = id;
 
-    org = new SDL_Rect();
+    org = std::make_unique<SDL_Rect>();
     org->h = 16;
     org->w = 16;
     org->x = 0;
     org->y = 0;
 
-    dst = new SDL_Rect();
+    dst = std::make_shared<SDL_Rect>();
     dst->w = 16;
     dst->h = 16;
     dst->x = x * dst->w;
@@ -25,13 +25,13 @@ GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id, Entity *pare
     this->id = id;
     this->parent = parent;
 
-    org = new SDL_Rect();
+    org = std::make_unique<SDL_Rect>();
     org->h = 16;
     org->w = 16;
     org->x = 0;
     org->y = 0;
 
-    dst = new SDL_Rect();
+    dst = std::make_unique<SDL_Rect>();
     dst->w = 16;
     dst->h = 16;
     dst->x = x * dst->w;
@@ -41,14 +41,9 @@ GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id, Entity *pare
     this->y = y * dst->h;
 }
 
-GraphicItem::GraphicItem(SDL_Texture *texture, SDL_Rect *dst) : x(0), y(0), id() {
+GraphicItem::GraphicItem(SDL_Texture *texture, const std::shared_ptr<SDL_Rect> &dst) : x(0), y(0), id() {
     this->texture = texture;
-
     this->dst = dst;
-}
-
-GraphicItem::~GraphicItem() {
-    delete (org);
 }
 
 void GraphicItem::setPos(const int pX, const int pY) {

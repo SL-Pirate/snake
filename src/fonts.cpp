@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "entity.hpp"
 #include "sdl_window.hpp"
 
@@ -16,18 +18,9 @@ Fonts::Fonts(
         std::cout << "could not load fonts " << SDL_GetError() << std::endl;
     }
 
-    dst = new SDL_Rect();
-    dst->h = 25;
-    dst->w = 100;
-    dst->x = x; // 190;
-    dst->y = y; // 500;
+    dst = std::make_shared<SDL_Rect>(x, y, 100, 25);
 
     setTitle(title);
-}
-
-Fonts::~Fonts() {
-    delete (dst);
-    dst = nullptr;
 }
 
 void Fonts::setTitle(const std::string &pTitle) {

@@ -28,7 +28,7 @@ In order of implementation.
     - Where: `src/food.cpp:30-60`
     - Convert to: `std::vector<std::array<int, 2>>`
 
-- [ ] **6. `GraphicItem` internals**: `org`, `dst`, `pos`, and `dst` in `Fonts`
+- [x] **6. `GraphicItem` internals**: `org`, `dst`, `pos`, and `dst` in `Fonts`
     - Where: `src/graphic_handler.cpp`, `src/fonts.cpp:19`
     - Convert to: `SDL_Rect` by value. `getPos()` returns `std::array<int, 2>`.
     - Fixes: `getPos()` uses `delete` on an array at `src/graphic_handler.cpp:61`.

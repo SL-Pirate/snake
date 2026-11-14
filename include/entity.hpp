@@ -37,7 +37,7 @@ public:
 //definition of the class Fonts, child of entity
 class Fonts : public Entity {
     TTF_Font *font = nullptr;
-    SDL_Rect *dst = nullptr;
+    std::shared_ptr<SDL_Rect> dst = nullptr;
     std::string title;
     BodyColor color;
 
@@ -45,8 +45,6 @@ public:
     //int x = horizontal position of the label
     //int y = vertical position of the label
     Fonts(Window *gameWin, const std::string &title, BodyColor color, int x, int y);
-
-    ~Fonts() override;
 
     void setTitle(const std::string &pTitle);
 
