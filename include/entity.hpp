@@ -12,31 +12,35 @@
 #include <memory>
 
 typedef std::vector<std::vector<std::shared_ptr<GraphicItem> > > Arena;
-typedef std::shared_ptr<std::array<Dir, NUM_CHAINED_MOVES_ALLOWED>> Moves;
+typedef std::shared_ptr<std::array<Dir, NUM_CHAINED_MOVES_ALLOWED> > Moves;
 
 //parent class for all entities snake, wall and food
 class Entity {
 protected:
     Window *gameWin = nullptr;
-    SDL_Texture *texture = nullptr;
+    std::shared_ptr<SDL_Texture> texture = nullptr;
     //GraphicItem *arr[ROWS()][COLS()];
     Arena *arr = nullptr;
     //used for passing food entities to set them to null so food can be regenerated if eaten
     std::shared_ptr<GraphicItem> item = nullptr;
 
 public:
+    virtual ~Entity() = default;
+
     Entity();
 
-    virtual ~Entity();
-
     //used for passing food entities to set them to null so food can be regenerated if eaten
-    virtual void clearItem() = 0;
+    virtual void clearItem() {
+    }
 };
 
+struct FontDeleter {
+    void operator()(TTF_Font *ptr) const { TTF_CloseFont(ptr); };
+};
 
 //definition of the class Fonts, child of entity
 class Fonts : public Entity {
-    TTF_Font *font = nullptr;
+    std::unique_ptr<TTF_Font, FontDeleter> font = nullptr;
     std::shared_ptr<SDL_Rect> dst = nullptr;
     std::string title;
     BodyColor color;
@@ -47,8 +51,6 @@ public:
     Fonts(Window *gameWin, const std::string &title, BodyColor color, int x, int y);
 
     void setTitle(const std::string &pTitle);
-
-    void clearItem() override;
 
     [[nodiscard]] std::shared_ptr<GraphicItem> getItem() const;
 };
@@ -74,8 +76,6 @@ class Snake : public Entity {
 public:
     Snake(Window *gameWin, Arena *arr, wxSlider *difficulty, BodyColor color);
 
-    void clearItem() override;
-
     void addToArr() const;
 
     bool move();
@@ -97,8 +97,6 @@ public:
 class Wall : public Entity {
 public:
     Wall(Window *gameWin, Arena *arena);
-
-    void clearItem() override;
 };
 
 
@@ -123,5 +121,6 @@ public:
     Pos(int x, int y);
 
     [[nodiscard]] int getX() const;
+
     [[nodiscard]] int getY() const;
 };

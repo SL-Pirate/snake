@@ -34,11 +34,11 @@ In order of implementation.
     - Fixes: `getPos()` uses `delete` on an array at `src/graphic_handler.cpp:61`.
     - Goal: `~GraphicItem` becomes empty.
 
-- [ ] **7. `SDL_Texture`**: entity textures, `Game::background`, font texture
-    - Where: `src/snake.cpp:11`, `src/game.cpp:321`, `src/fonts.cpp:37`
-    - Convert to: `std::unique_ptr` with a custom deleter (`SDL_DestroyTexture`)
+  - [x] **7. `SDL_Texture`**: entity textures, `Game::background`, font texture
+      - Where: `src/snake.cpp:11`, `src/game.cpp:321`, `src/fonts.cpp:37`
+      - Convert to: `std::unique_ptr` with a custom deleter (`SDL_DestroyTexture`)
 
-- [ ] **8. `TTF_Font` in `Fonts`**
+- [x] **8. `TTF_Font` in `Fonts`**
     - Where: `src/fonts.cpp:14`
     - Convert to: `std::unique_ptr` with a custom deleter (`TTF_CloseFont`)
     - Fixes: the font is never closed (leak).

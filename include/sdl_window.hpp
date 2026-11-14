@@ -19,13 +19,13 @@ public:
 
     void clearRen() const;
 
-    void render(SDL_Texture *texture) const;
+    void render(const std::shared_ptr<SDL_Texture>& texture) const;
 
     void render(const std::shared_ptr<GraphicItem> &item) const;
 
     void display() const;
 
-    SDL_Texture *loadTexture(SDL_RWops *res) const;
+    std::shared_ptr<SDL_Texture> loadTexture(SDL_RWops *res) const;
 
     SDL_Renderer *ren = nullptr;
 };

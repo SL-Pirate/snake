@@ -16,7 +16,7 @@ typedef std::vector<std::unique_ptr<Food> > FoodContainer;
 // defining class Game
 class Game {
     Window *gameWin = nullptr;
-    SDL_Texture *background = nullptr;
+    std::shared_ptr<SDL_Texture> background = nullptr;
     Arena arr;
     bool isKeyPressed = false;
     bool isPaused = false;

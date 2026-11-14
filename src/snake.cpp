@@ -9,11 +9,6 @@
 // which is the parent class for all entities snke, wall and food
 Entity::Entity() = default;
 
-Entity::~Entity() {
-    SDL_DestroyTexture(texture);
-    texture = nullptr;
-}
-
 // definition of the actual "Snake" class
 Snake::Snake(Window *gameWin, Arena *arr, wxSlider *difficulty, const BodyColor color) {
     this->gameWin = gameWin;
@@ -179,10 +174,6 @@ void Snake::setInitialDir(const Dir pDir) const {
     for (int i = 1; i < NUM_CHAINED_MOVES_ALLOWED; i++) {
         (*registeredDirs)[i] = none;
     }
-}
-
-void Snake::clearItem() {
-    item = nullptr;
 }
 
 int Snake::getScore() const {

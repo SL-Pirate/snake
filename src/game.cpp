@@ -306,8 +306,6 @@ void Game::stopGame(const bool isMultiplayer) const {
 Game::~Game() {
     gameWin->hide();
     gameWin = nullptr;
-    SDL_DestroyTexture(background);
-    background = nullptr;
 
     Mix_CloseAudio();
     IMG_Quit();

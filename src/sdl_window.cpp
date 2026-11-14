@@ -43,16 +43,16 @@ void Window::display() const {
     SDL_RenderPresent(ren);
 }
 
-void Window::render(SDL_Texture *texture) const {
-    SDL_RenderCopy(ren, texture, nullptr, nullptr);
+void Window::render(const std::shared_ptr<SDL_Texture>& texture) const {
+    SDL_RenderCopy(ren, texture.get(), nullptr, nullptr);
 }
 
 void Window::render(const std::shared_ptr<GraphicItem> &item) const {
-    SDL_RenderCopy(ren, item->texture, item->org.get(), item->dst.get());
+    SDL_RenderCopy(ren, item->texture.get(), item->org.get(), item->dst.get());
 }
 
-SDL_Texture *Window::loadTexture(SDL_RWops *res) const {
-    SDL_Texture *texture = IMG_LoadTexture_RW(ren, res, 1);
+std::shared_ptr<SDL_Texture> Window::loadTexture(SDL_RWops *res) const {
+    const std::shared_ptr<SDL_Texture> texture(IMG_LoadTexture_RW(ren, res, 1), SDL_DestroyTexture);
 
     if (texture == nullptr) {
         // std::cout << "Loading texture file " << filePath << " failed with Error: " << SDL_GetError() << std::endl;

@@ -1,6 +1,6 @@
 #include "entity.hpp"
 
-GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id) {
+GraphicItem::GraphicItem(const std::shared_ptr<SDL_Texture> &texture, const int x, const int y, const ID id) {
     this->texture = texture;
     this->id = id;
 
@@ -20,7 +20,13 @@ GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id) {
     this->y = y * dst->h;
 }
 
-GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id, Entity *parent) {
+GraphicItem::GraphicItem(
+    const std::shared_ptr<SDL_Texture> &texture,
+    const int x,
+    const int y,
+    const ID id,
+    Entity *parent
+) {
     this->texture = texture;
     this->id = id;
     this->parent = parent;
@@ -41,7 +47,10 @@ GraphicItem::GraphicItem(SDL_Texture *texture, int x, int y, ID id, Entity *pare
     this->y = y * dst->h;
 }
 
-GraphicItem::GraphicItem(SDL_Texture *texture, const std::shared_ptr<SDL_Rect> &dst) : x(0), y(0), id() {
+GraphicItem::GraphicItem(
+    const std::shared_ptr<SDL_Texture> &texture,
+    const std::shared_ptr<SDL_Rect> &dst
+) : x(0), y(0), id() {
     this->texture = texture;
     this->dst = dst;
 }

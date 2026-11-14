@@ -13,7 +13,7 @@ Fonts::Fonts(
     this->gameWin = gameWin;
     this->color = color;
 
-    font = TTF_OpenFontRW(openRes("fonts/LiberationSans-Bold.ttf"), 1, 72);
+    font.reset(TTF_OpenFontRW(openRes("fonts/LiberationSans-Bold.ttf"), 1, 72));
     if (font == nullptr) {
         std::cout << "could not load fonts " << SDL_GetError() << std::endl;
     }
@@ -26,32 +26,23 @@ Fonts::Fonts(
 void Fonts::setTitle(const std::string &pTitle) {
     this->title = pTitle;
 
-    if (texture != nullptr) {
-        SDL_DestroyTexture(texture);
-        texture = nullptr;
-    }
-
-    SDL_Surface *textSurf = nullptr;
+    struct SurfaceDeleter {
+        void operator()(SDL_Surface *ptr) const { SDL_FreeSurface(ptr); }
+    };
+    std::unique_ptr<SDL_Surface, SurfaceDeleter> textSurf = nullptr;
     switch (color) {
         case RED:
-            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {.r = 225, .g = 0, .b = 0});
+            textSurf.reset(TTF_RenderText_Blended(font.get(), pTitle.c_str(), {.r = 225, .g = 0, .b = 0}));
             break;
         case BLUE:
-            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {.r = 0, .g = 0, .b = 225});
+            textSurf.reset(TTF_RenderText_Blended(font.get(), pTitle.c_str(), {.r = 0, .g = 0, .b = 225}));
             break;
         default:
-            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {.r = 225, .g = 0, .b = 0});
+            textSurf.reset(TTF_RenderText_Blended(font.get(), pTitle.c_str(), {.r = 225, .g = 0, .b = 0}));
     }
 
-    texture = SDL_CreateTextureFromSurface(gameWin->ren, textSurf);
-
-    SDL_FreeSurface(textSurf);
-    textSurf = nullptr;
-
+    texture.reset(SDL_CreateTextureFromSurface(gameWin->ren, textSurf.get()), SDL_DestroyTexture);
     item = std::make_shared<GraphicItem>(texture, dst);
-}
-
-void Fonts::clearItem() {
 }
 
 std::shared_ptr<GraphicItem> Fonts::getItem() const {
