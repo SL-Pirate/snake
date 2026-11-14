@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 class GraphicItem;
 
@@ -20,7 +21,7 @@ public:
 
     void render(SDL_Texture *texture) const;
 
-    void render(const GraphicItem *item) const;
+    void render(const std::shared_ptr<GraphicItem> &item) const;
 
     void display() const;
 

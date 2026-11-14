@@ -50,7 +50,6 @@ GraphicItem::GraphicItem(SDL_Texture *texture, SDL_Rect *dst) : x(0), y(0), id()
 GraphicItem::~GraphicItem() {
     delete (pos);
     delete (org);
-    delete (dst);
 }
 
 void GraphicItem::setPos(const int pX, const int pY) {
@@ -59,6 +58,7 @@ void GraphicItem::setPos(const int pX, const int pY) {
 }
 
 int *GraphicItem::getPos() {
+    delete pos;
     pos = new int[2];
     pos[0] = x / dst->w;
     pos[1] = y / dst->h;

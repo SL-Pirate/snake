@@ -28,13 +28,13 @@ Game::Game(cMain *parent, Window *gameWin) {
 
 void Game::startSingleplayer() {
     background = gameWin->loadTexture(openRes("gfx/grass-pattern.png")); // res/gfx/grass-pattern.png
-    foods = new Food *[numFoodItemsSinglePlayer];
+    foods = new Food *[NUM_FOOD_ITEMS_SINGLE_PLAYER];
 
     // arr[ROWS()][COLS()]
     // equates to arr[y][x]
-    arr = new GraphicItem **[ROWS()];
+    arr = Arena(ROWS());
     for (int i = 0; i < ROWS(); i++) {
-        arr[i] = new GraphicItem *[COLS()];
+        arr[i] = std::vector<std::shared_ptr<GraphicItem> >(COLS());
     }
 
     for (int i = 0; i < ROWS(); i++) {
@@ -43,12 +43,12 @@ void Game::startSingleplayer() {
         }
     }
 
-    wall = new Wall(gameWin, arr);
+    wall = new Wall(gameWin, &arr);
 
     // implementing snake & food
-    snake = new Snake(gameWin, arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, RED);
-    for (int i = 0; i < numFoodItemsSinglePlayer; i++) {
-        foods[i] = new Food(gameWin, arr);
+    snake = new Snake(gameWin, &arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, RED);
+    for (int i = 0; i < NUM_FOOD_ITEMS_SINGLE_PLAYER; i++) {
+        foods[i] = new Food(gameWin, &arr);
     }
 
     parent->m_timer.Bind(wxEVT_TIMER, &Game::singlePlayerEventHandler, this);
@@ -107,7 +107,7 @@ void Game::singlePlayerEventHandler(wxTimerEvent &) {
 
     // refresh food
     try {
-        for (int i = 0; i < numFoodItemsSinglePlayer; i++) {
+        for (int i = 0; i < NUM_FOOD_ITEMS_SINGLE_PLAYER; i++) {
             foods[i]->genFood();
         }
     } catch (GridSpaceFullError &) {
@@ -116,7 +116,7 @@ void Game::singlePlayerEventHandler(wxTimerEvent &) {
 
     // displaying everything on screen
     gameWin->render(background);
-    gameWin->render((snake->font->getItem()));
+    gameWin->render(snake->font->getItem());
     for (int i = 0; i < ROWS(); i++) {
         for (int j = 0; j < COLS(); j++) {
             if (arr[i][j] != nullptr) {
@@ -133,13 +133,13 @@ void Game::singlePlayerEventHandler(wxTimerEvent &) {
 
 void Game::startMultiplayer() {
     background = gameWin->loadTexture(openRes("gfx/grass-pattern.png")); // res/gfx/grass-pattern.png
-    foods = new Food *[numFoodItemsMultiPlayer];
+    foods = new Food *[NUM_FOOD_ITEMS_MULTI_PLAYER];
 
     // arr[ROWS()][COLS()]
     // equates to arr[y][x]
-    arr = new GraphicItem **[ROWS()];
+    arr = Arena(ROWS());
     for (int i = 0; i < ROWS(); i++) {
-        arr[i] = new GraphicItem *[COLS()];
+        arr[i] = std::vector<std::shared_ptr<GraphicItem> >(COLS());
     }
 
     for (int i = 0; i < ROWS(); i++) {
@@ -148,14 +148,14 @@ void Game::startMultiplayer() {
         }
     }
 
-    wall = new Wall(gameWin, arr);
+    wall = new Wall(gameWin, &arr);
 
     // implementing snake & food
-    snake1 = new Snake(gameWin, arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, RED);
-    snake2 = new Snake(gameWin, arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, BLUE);
+    snake1 = new Snake(gameWin, &arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, RED);
+    snake2 = new Snake(gameWin, &arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, BLUE);
     snake2->setInitialDir(left);
-    for (int i = 0; i < numFoodItemsMultiPlayer; i++) {
-        foods[i] = new Food(gameWin, arr);
+    for (int i = 0; i < NUM_FOOD_ITEMS_MULTI_PLAYER; i++) {
+        foods[i] = new Food(gameWin, &arr);
     }
 
     parent->m_timer.Bind(wxEVT_TIMER, &Game::multiPlayerEventHandler, this);
@@ -253,7 +253,7 @@ void Game::multiPlayerEventHandler(wxTimerEvent &event) {
 
     // refresh food
     try {
-        for (int i = 0; i < numFoodItemsMultiPlayer; i++) {
+        for (int i = 0; i < NUM_FOOD_ITEMS_MULTI_PLAYER; i++) {
             foods[i]->genFood();
         }
     } catch (GridSpaceFullError &) {
@@ -262,8 +262,8 @@ void Game::multiPlayerEventHandler(wxTimerEvent &event) {
 
     // displaying everything on screen
     gameWin->render(background);
-    gameWin->render((snake1->font->getItem()));
-    gameWin->render((snake2->font->getItem()));
+    gameWin->render(snake1->font->getItem());
+    gameWin->render(snake2->font->getItem());
     for (int i = 0; i < ROWS(); i++) {
         for (int j = 0; j < COLS(); j++) {
             if (arr[i][j] != nullptr) {
@@ -292,7 +292,7 @@ void Game::stopGame(bool isMultiplayer) {
 
         gameWin->clearRen();
         parent->quit(penaltyPerCentForGameQuitOnMultiPlayer, culpritSnake);
-        for (int i = 0; i < numFoodItemsMultiPlayer; i++) {
+        for (int i = 0; i < NUM_FOOD_ITEMS_MULTI_PLAYER; i++) {
             delete (foods[i]);
             foods[i] = nullptr;
         }
@@ -306,7 +306,7 @@ void Game::stopGame(bool isMultiplayer) {
 
         gameWin->clearRen();
         parent->quit();
-        for (int i = 0; i < numFoodItemsSinglePlayer; i++) {
+        for (int i = 0; i < NUM_FOOD_ITEMS_SINGLE_PLAYER; i++) {
             delete (foods[i]);
             foods[i] = nullptr;
         }
@@ -320,15 +320,6 @@ Game::~Game() {
     gameWin = nullptr;
     SDL_DestroyTexture(background);
     background = nullptr;
-    // DO NOT free graphic items from anywhere else since they will be already freed from here
-    for (int i = 0; i < ROWS(); i++) {
-        for (int j = 0; j < COLS(); j++) {
-            delete (arr[i][j]);
-        }
-        delete (arr[i]);
-    }
-    delete (arr);
-    arr = nullptr;
     delete (snake);
     snake = nullptr;
     delete (snake1);
@@ -351,7 +342,7 @@ void Game::resume() {
 }
 
 void Game::setDir(const Dir currentDir, Dir *dirs) {
-    for (int i = 0; i <= maxNumChainedMovesAllowed; i++) {
+    for (int i = 0; i <= NUM_CHAINED_MOVES_ALLOWED; i++) {
         if (dirs[i] != none) {
             continue;
         } else {
@@ -362,7 +353,7 @@ void Game::setDir(const Dir currentDir, Dir *dirs) {
 }
 
 void Game::setDir(const Dir currentDir, Dir *dirs, bool *snake_moved) {
-    for (int i = 0; i <= maxNumChainedMovesAllowed; i++) {
+    for (int i = 0; i <= NUM_CHAINED_MOVES_ALLOWED; i++) {
         if (dirs[i] != none) {
             continue;
         } else {
@@ -376,8 +367,8 @@ void Game::setDir(const Dir currentDir, Dir *dirs, bool *snake_moved) {
 
 Dir *Game::resetDirs() {
     // setting chained inputs (directions) to none
-    const auto dirs = new Dir[maxNumChainedMovesAllowed];
-    for (int i = 0; i < maxNumChainedMovesAllowed; i++) {
+    const auto dirs = new Dir[NUM_CHAINED_MOVES_ALLOWED];
+    for (int i = 0; i < NUM_CHAINED_MOVES_ALLOWED; i++) {
         dirs[i] = none;
     }
 

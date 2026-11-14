@@ -13,14 +13,14 @@ Entity::~Entity() {
 }
 
 // definition of the actual "Snake" class
-Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, const BodyColor color) {
+Snake::Snake(Window *gameWin, Arena *arr, wxSlider *difficulty, const BodyColor color) {
     this->gameWin = gameWin;
     this->arr = arr;
     this->color = color;
-    snake = new GraphicItem *[ROWS() * COLS()];
+    snake = std::vector<std::shared_ptr<GraphicItem> >(ROWS() * COLS());
     eatSound = new Sound("sfx/boom.wav");
     dieSound = new Sound("sfx/aaaugh.wav");
-    registeredDirs = new Dir[maxNumChainedMovesAllowed];
+    registeredDirs = new Dir[NUM_CHAINED_MOVES_ALLOWED];
     setInitialDir(right);
 
     const char *filePath;
@@ -28,8 +28,8 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, const Bo
     if (color == RED) {
         filePath = "gfx/red.png";
         texture = gameWin->loadTexture(openRes(filePath)); // res/gfx/body.png
-        snake[0] = new GraphicItem(texture, (int) ROWS() / 2, (int) COLS() / 2, SNAKE);
-        snake[1] = new GraphicItem(texture, (int) ROWS() / 2 + 1, (int) COLS() / 2, SNAKE);
+        snake[0] = std::make_shared<GraphicItem>(texture, ROWS() / 2, COLS() / 2, SNAKE);
+        snake[1] = std::make_shared<GraphicItem>(texture, ROWS() / 2 + 1, COLS() / 2, SNAKE);
 
         // display scores
         scoreTitle = "Arrows: ";
@@ -38,8 +38,8 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, const Bo
         dir = left;
         filePath = "gfx/blue.png";
         texture = gameWin->loadTexture(openRes(filePath)); // res/gfx/body.png
-        snake[0] = new GraphicItem(texture, (int) ROWS() / 2, (int) COLS() / 2 + 1, SNAKE);
-        snake[1] = new GraphicItem(texture, (int) ROWS() / 2 + 1, (int) COLS() / 2 + 1, SNAKE);
+        snake[0] = std::make_shared<GraphicItem>(texture, ROWS() / 2, COLS() / 2 + 1, SNAKE);
+        snake[1] = std::make_shared<GraphicItem>(texture, ROWS() / 2 + 1, COLS() / 2 + 1, SNAKE);
 
         // display scores
         scoreTitle = "WASD: ";
@@ -52,7 +52,8 @@ Snake::Snake(Window *gameWin, GraphicItem ***arr, wxSlider *difficulty, const Bo
 
 void Snake::addToArr() const {
     for (int i = 0; i < length; i++) {
-        arr[snake[i]->getPos()[0]][snake[i]->getPos()[1]] = snake[i];
+        const auto pos = snake[i]->getPos();
+        (*arr)[pos[0]][pos[1]] = snake[i];
     }
 }
 
@@ -67,22 +68,24 @@ bool Snake::move() {
     }
 
     // deleting the last square where the snake's tail was last in
-    arr[snake[length - 1]->getPos()[0]][snake[length - 1]->getPos()[1]] = nullptr;
+    const auto pos = snake[length - 1]->getPos();
+    (*arr)[pos[0]][pos[1]] = nullptr;
 
     // collision detection
-    GraphicItem *nextItem = nullptr;
+    std::shared_ptr<GraphicItem> nextItem = nullptr;
+    const auto pos1 = snake[0]->getPos();
     switch (dir) {
         case up:
-            nextItem = arr[snake[0]->getPos()[0]][snake[0]->getPos()[1] - 1];
+            nextItem = (*arr)[pos1[0]][pos1[1] - 1];
             break;
         case down:
-            nextItem = arr[snake[0]->getPos()[0]][snake[0]->getPos()[1] + 1];
+            nextItem = (*arr)[pos1[0]][pos1[1] + 1];
             break;
         case left:
-            nextItem = arr[snake[0]->getPos()[0] - 1][snake[0]->getPos()[1]];
+            nextItem = (*arr)[pos1[0] - 1][pos1[1]];
             break;
         case right:
-            nextItem = arr[snake[0]->getPos()[0] + 1][snake[0]->getPos()[1]];
+            nextItem = (*arr)[pos1[0] + 1][pos1[1]];
             break;
         default:
             nextItem = nullptr;
@@ -94,32 +97,32 @@ bool Snake::move() {
             return false;
         }
         // ate food
-        else if (nextItem->id == FOOD) {
+        if (nextItem->id == FOOD) {
             ate(nextItem);
         }
     } else {
-        delete (snake[length - 1]);
         snake[length - 1] = nullptr;
     }
 
     for (int i = length - 1; i >= 1; i--) {
         snake[i] = snake[i - 1];
     }
+    const auto pos2 = snake[1]->getPos();
     switch (dir) {
         case up:
-            snake[0] = new GraphicItem(texture, snake[1]->getPos()[0], snake[1]->getPos()[1] - 1, SNAKE);
+            snake[0] = std::make_shared<GraphicItem>(texture, pos2[0], pos2[1] - 1, SNAKE);
             break;
         case down:
-            snake[0] = new GraphicItem(texture, snake[1]->getPos()[0], snake[1]->getPos()[1] + 1, SNAKE);
+            snake[0] = std::make_shared<GraphicItem>(texture, pos2[0], pos2[1] + 1, SNAKE);
             break;
         case left:
-            snake[0] = new GraphicItem(texture, snake[1]->getPos()[0] - 1, snake[1]->getPos()[1], SNAKE);
+            snake[0] = std::make_shared<GraphicItem>(texture, pos2[0] - 1, pos2[1], SNAKE);
             break;
         case right:
-            snake[0] = new GraphicItem(texture, snake[1]->getPos()[0] + 1, snake[1]->getPos()[1], SNAKE);
+            snake[0] = std::make_shared<GraphicItem>(texture, pos2[0] + 1, pos2[1], SNAKE);
             break;
         default:
-            snake[0] = new GraphicItem(texture, snake[1]->getPos()[0] + 1, snake[1]->getPos()[1], SNAKE);
+            snake[0] = std::make_shared<GraphicItem>(texture, pos2[0] + 1, pos2[1], SNAKE);
     }
 
     addToArr();
@@ -137,23 +140,23 @@ Dir Snake::getNextDir() const {
     const Dir currentDir = registeredDirs[0];
 
     // removing second dir from the list
-    for (int i = 1; i < maxNumChainedMovesAllowed; i++) {
+    for (int i = 1; i < NUM_CHAINED_MOVES_ALLOWED; i++) {
         if (registeredDirs[i] != none) {
             registeredDirs[i - 1] = registeredDirs[i];
         }
     }
-    registeredDirs[maxNumChainedMovesAllowed] = none;
+    registeredDirs[NUM_CHAINED_MOVES_ALLOWED] = none;
 
     return currentDir;
 }
 
-void Snake::ate(GraphicItem *nextItem) {
+void Snake::ate(const std::shared_ptr<GraphicItem> &nextItem) {
     length++;
     score += 10 * difficulty->GetValue();
 
     // delete the food item
-    arr[nextItem->getPos()[0]][nextItem->getPos()[1]]->rmFromParent();
-    delete (arr[nextItem->getPos()[0]][nextItem->getPos()[1]]);
+    const auto nextPos = nextItem->getPos();
+    (*arr)[nextPos[0]][nextPos[1]]->rmFromParent();
 
     // output the score
     font->setTitle(scoreTitle + std::to_string(score));
@@ -164,7 +167,7 @@ void Snake::ate(GraphicItem *nextItem) {
 
 void Snake::setInitialDir(const Dir pDir) const {
     registeredDirs[0] = pDir;
-    for (int i = 1; i < maxNumChainedMovesAllowed; i++) {
+    for (int i = 1; i < NUM_CHAINED_MOVES_ALLOWED; i++) {
         registeredDirs[i] = none;
     }
 }

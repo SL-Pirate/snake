@@ -3,11 +3,11 @@
 //marcos
 #define SDL_MAIN_HANDLED
 #define VERSION "v5.2"
-#define texWidth 16
-#define texHeight 16
-#define numFoodItemsSinglePlayer 2
-#define numFoodItemsMultiPlayer 3
-#define maxNumChainedMovesAllowed 3
+#define TEXT_WIDTH 16
+#define TEXT_HEIGHT 16
+#define NUM_FOOD_ITEMS_SINGLE_PLAYER 2
+#define NUM_FOOD_ITEMS_MULTI_PLAYER 3
+#define NUM_CHAINED_MOVES_ALLOWED 3
 
 //for debugging purposes
 #include <cmrc/cmrc.hpp>

@@ -47,7 +47,7 @@ void Window::render(SDL_Texture *texture) const {
     SDL_RenderCopy(ren, texture, nullptr, nullptr);
 }
 
-void Window::render(const GraphicItem *item) const {
+void Window::render(const std::shared_ptr<GraphicItem> &item) const {
     SDL_RenderCopy(ren, item->texture, item->org, item->dst);
 }
 

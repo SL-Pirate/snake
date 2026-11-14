@@ -3,7 +3,7 @@
 
 std::mt19937 Food::gen{std::random_device{}()};
 
-Food::Food(Window *gameWin, GraphicItem ***arr) {
+Food::Food(Window *gameWin, Arena *arr) {
     this->arr = arr;
     this->gameWin = gameWin;
     texture = gameWin->loadTexture(openRes("gfx/egg.png"));
@@ -17,7 +17,7 @@ void Food::genFood() {
 
         for (int i = 0; i < ROWS(); i++) {
             for (int j = 0; j < COLS(); j++) {
-                if (arr[i][j] == nullptr) {
+                if ((*arr)[i][j] == nullptr) {
                     len_emptyCords++;
                 }
             }
@@ -32,7 +32,7 @@ void Food::genFood() {
 
         for (int i = 0; i < ROWS(); i++) {
             for (int j = 0; j < COLS(); j++) {
-                if (arr[i][j] == nullptr) {
+                if ((*arr)[i][j] == nullptr) {
                     emptyCords[index_emptyCords] = new int[2];
                     emptyCords[index_emptyCords][0] = i;
                     emptyCords[index_emptyCords][1] = j;
@@ -50,8 +50,9 @@ void Food::genFood() {
 
         cords = {emptyCords[lucky_index][0], emptyCords[lucky_index][1]};
 
-        item = new GraphicItem(texture, cords[0], cords[1], FOOD, this);
-        arr[cords[0]][cords[1]] = item;
+        // item = new GraphicItem(texture, cords[0], cords[1], FOOD, this);
+        item = std::make_shared<GraphicItem>(texture, cords[0], cords[1], FOOD, this);
+        (*arr)[cords[0]][cords[1]] = item;
 
         for (int i = 0; i < len_emptyCords; i++) {
             delete[](emptyCords[i]);

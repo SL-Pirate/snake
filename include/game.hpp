@@ -1,5 +1,6 @@
 #pragma once
 
+#include "entity.hpp"
 #include "main.hpp"
 #include "wxwids.hpp"
 #include "sdl_window.hpp"
@@ -14,7 +15,7 @@ class Food;
 class Game {
     Window *gameWin = nullptr;
     SDL_Texture *background = nullptr;
-    GraphicItem ***arr = nullptr;
+    Arena arr;
     bool isKeyPressed = false;
     bool isPaused = false;
     Food **foods = nullptr;

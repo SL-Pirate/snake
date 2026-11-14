@@ -1,7 +1,13 @@
 #include "entity.hpp"
 #include "sdl_window.hpp"
 
-Fonts::Fonts(Window *gameWin, const std::string &title, const BodyColor color, const int x, const int y) {
+Fonts::Fonts(
+    Window *gameWin,
+    const std::string &title,
+    const BodyColor color,
+    const int x,
+    const int y
+) {
     this->gameWin = gameWin;
     this->color = color;
 
@@ -28,19 +34,20 @@ void Fonts::setTitle(const std::string &pTitle) {
     this->title = pTitle;
 
     if (texture != nullptr) {
+        SDL_DestroyTexture(texture);
         texture = nullptr;
     }
 
     SDL_Surface *textSurf = nullptr;
     switch (color) {
         case RED:
-            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {225, 0, 0});
+            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {.r = 225, .g = 0, .b = 0});
             break;
         case BLUE:
-            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {0, 0, 225});
+            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {.r = 0, .g = 0, .b = 225});
             break;
         default:
-            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {225, 0, 0});
+            textSurf = TTF_RenderText_Blended(font, pTitle.c_str(), {.r = 225, .g = 0, .b = 0});
     }
 
     texture = SDL_CreateTextureFromSurface(gameWin->ren, textSurf);
@@ -48,13 +55,12 @@ void Fonts::setTitle(const std::string &pTitle) {
     SDL_FreeSurface(textSurf);
     textSurf = nullptr;
 
-    item = new GraphicItem(texture, dst);
+    item = std::make_shared<GraphicItem>(texture, dst);
 }
 
 void Fonts::clearItem() {
-    delete (item);
 }
 
-GraphicItem *Fonts::getItem() const {
+std::shared_ptr<GraphicItem> Fonts::getItem() const {
     return item;
 }

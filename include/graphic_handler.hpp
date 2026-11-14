@@ -3,7 +3,6 @@
 class Entity;
 
 class GraphicItem {
-private:
     int x, y;
     int *pos = nullptr;
     Entity *parent = nullptr;
