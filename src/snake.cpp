@@ -151,7 +151,7 @@ Dir Snake::getNextDir() const {
     // removing second dir from the list
     for (int i = 1; i < NUM_CHAINED_MOVES_ALLOWED; i++) {
         if ((*registeredDirs)[i] != none) {
-            registeredDirs.get()[i - 1] = registeredDirs.get()[i];
+            (*registeredDirs)[i - 1] = (*registeredDirs)[i];
         }
     }
     (*registeredDirs)[NUM_CHAINED_MOVES_ALLOWED - 1] = none;
