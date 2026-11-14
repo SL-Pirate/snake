@@ -3,7 +3,7 @@
 
 std::mt19937 Food::gen{std::random_device{}()};
 
-Food::Food(Window *gameWin, Arena *arr) {
+Food::Food(const std::shared_ptr<Window> &gameWin, Arena *arr) {
     this->arr = arr;
     this->gameWin = gameWin;
     texture = gameWin->loadTexture(openRes("gfx/egg.png"));

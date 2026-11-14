@@ -4,7 +4,7 @@
 #include "sdl_window.hpp"
 
 Fonts::Fonts(
-    Window *gameWin,
+    const std::shared_ptr<Window> &gameWin,
     const std::string &title,
     const BodyColor color,
     const int x,

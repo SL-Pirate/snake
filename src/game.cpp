@@ -9,7 +9,7 @@
 #include "error.hpp"
 #include "sound.hpp"
 
-Game::Game(cMain *parent, Window *gameWin) {
+Game::Game(cMain *parent, const std::shared_ptr<Window> &gameWin) {
     this->parent = parent;
     this->gameWin = gameWin;
     // IMG_Init returns the same number that is passed

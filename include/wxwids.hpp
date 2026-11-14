@@ -11,8 +11,6 @@ class cMain : public wxFrame {
 public:
     cMain();
 
-    ~cMain() override;
-
     wxSlider *difficulty = nullptr;
     wxTimer m_timer;
 
@@ -23,8 +21,8 @@ public:
     void quit(double penaltyPerCentForGameQuitOnMultiPlayer, const std::shared_ptr<BodyColor> &snake);
 
 private:
-    Game *game = nullptr;
-    Window *gameWin = nullptr;
+    std::unique_ptr<Game> game = nullptr;
+    std::shared_ptr<Window> gameWin = nullptr;
     wxButton *btn = nullptr;
     wxButton *btn1 = nullptr;
     wxButton *btn2 = nullptr;

@@ -3,9 +3,15 @@
 #include "sdl_window.hpp"
 #include "entity.hpp"
 
-Window::Window(const char *title, int h, int w) {
-    win = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h,
-                           SDL_WINDOW_HIDDEN | SDL_WINDOW_ALWAYS_ON_TOP);
+Window::Window(const char *title, const int h, const int w) {
+    win = SDL_CreateWindow(
+        title,
+        SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED,
+        w,
+        h,
+        SDL_WINDOW_HIDDEN | SDL_WINDOW_ALWAYS_ON_TOP
+    );
 
     if (win == nullptr) {
         // std::cout << "Window initialization failed! \nError: " << SDL_GetError() << std::endl;
@@ -43,7 +49,7 @@ void Window::display() const {
     SDL_RenderPresent(ren);
 }
 
-void Window::render(const std::shared_ptr<SDL_Texture>& texture) const {
+void Window::render(const std::shared_ptr<SDL_Texture> &texture) const {
     SDL_RenderCopy(ren, texture.get(), nullptr, nullptr);
 }
 

@@ -30,12 +30,18 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Snake " VERSION, wxPoint(250, 50), 
 #ifdef _WIN32
     this->SetBackgroundColour(*wxWHITE);
 #endif
-    gameWin = new Window("Snake", winHeight + GAME_SCREEN_SCORE_HEIGHT_OFFSET, winWidth);
+    gameWin = std::make_shared<Window>("Snake", winHeight + GAME_SCREEN_SCORE_HEIGHT_OFFSET, winWidth);
     gameWin->hide();
-    game = game = new Game(this, gameWin);
+    game = std::make_unique<Game>(this, gameWin);
     this->Center();
-    in = new wxStaticText(this, wxID_ANY, "welcome to the Snake Game\nPlease set difficulty:", wxPoint(50, 30),
-                          wxSize(300, 50), wxALIGN_CENTER);
+    in = new wxStaticText(
+        this,
+        wxID_ANY,
+        "welcome to the Snake Game\nPlease set difficulty:",
+        wxPoint(50, 30),
+        wxSize(300, 50),
+        wxALIGN_CENTER
+    );
     difficulty = new wxSlider(this, 1009, 10, 1, 20, wxPoint(50, 100), wxSize(300, 50));
     btn = new wxButton(this, 1010, "Start Singleplayer", wxPoint(33, 170), wxSize(150, 50));
     btn2 = new wxButton(this, 1011, "Start Multiplayer\n(Chaotic Mode)", wxPoint(217, 170), wxSize(150, 70));
@@ -43,16 +49,6 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Snake " VERSION, wxPoint(250, 50), 
     btn1->Hide();
     out = new wxStaticText(this, wxID_ANY, outLabel, wxPoint(50, 290), wxSize(300, 140), wxALIGN_CENTER);
     out->Hide();
-}
-
-cMain::~cMain() {
-    delete (difficulty);
-    delete (game);
-    delete (gameWin);
-    delete (btn);
-    delete (btn1);
-    delete (out);
-    delete (in);
 }
 
 void cMain::startInternal() {

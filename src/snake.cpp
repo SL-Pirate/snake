@@ -10,7 +10,7 @@
 Entity::Entity() = default;
 
 // definition of the actual "Snake" class
-Snake::Snake(Window *gameWin, Arena *arr, wxSlider *difficulty, const BodyColor color) {
+Snake::Snake(const std::shared_ptr<Window>& gameWin, Arena *arr, wxSlider *difficulty, const BodyColor color) {
     this->gameWin = gameWin;
     this->arr = arr;
     this->color = color;

@@ -2,7 +2,7 @@
 #include "entity.hpp"
 #include "sdl_window.hpp"
 
-Wall::Wall(Window *gameWin, Arena *arena) {
+Wall::Wall(const std::shared_ptr<Window> &gameWin, Arena *arena) {
     this->gameWin = gameWin;
     this->arr = arena;
     texture = gameWin->loadTexture(openRes("gfx/brick_wall23.png")); //res/gfx/brick_wall23.png

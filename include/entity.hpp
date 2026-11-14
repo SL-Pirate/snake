@@ -17,9 +17,8 @@ typedef std::shared_ptr<std::array<Dir, NUM_CHAINED_MOVES_ALLOWED> > Moves;
 //parent class for all entities snake, wall and food
 class Entity {
 protected:
-    Window *gameWin = nullptr;
+    std::shared_ptr<Window> gameWin = nullptr;
     std::shared_ptr<SDL_Texture> texture = nullptr;
-    //GraphicItem *arr[ROWS()][COLS()];
     Arena *arr = nullptr;
     //used for passing food entities to set them to null so food can be regenerated if eaten
     std::shared_ptr<GraphicItem> item = nullptr;
@@ -48,7 +47,7 @@ class Fonts : public Entity {
 public:
     //int x = horizontal position of the label
     //int y = vertical position of the label
-    Fonts(Window *gameWin, const std::string &title, BodyColor color, int x, int y);
+    Fonts(const std::shared_ptr<Window> &gameWin, const std::string &title, BodyColor color, int x, int y);
 
     void setTitle(const std::string &pTitle);
 
@@ -74,7 +73,7 @@ class Snake : public Entity {
     [[nodiscard]] Dir getNextDir() const;
 
 public:
-    Snake(Window *gameWin, Arena *arr, wxSlider *difficulty, BodyColor color);
+    Snake(const std::shared_ptr<Window>& gameWin, Arena *arr, wxSlider *difficulty, BodyColor color);
 
     void addToArr() const;
 
@@ -96,7 +95,7 @@ public:
 //definition of the class Wall, child of entity 
 class Wall : public Entity {
 public:
-    Wall(Window *gameWin, Arena *arena);
+    Wall(const std::shared_ptr<Window> &gameWin, Arena *arena);
 };
 
 
@@ -106,7 +105,7 @@ class Food : public Entity {
     std::unique_ptr<Pos> cords = nullptr;
 
 public:
-    Food(Window *gameWin, Arena *arr);
+    Food(const std::shared_ptr<Window> &gameWin, Arena *arr);
 
     void genFood();
 

@@ -15,7 +15,7 @@ typedef std::vector<std::unique_ptr<Food> > FoodContainer;
 
 // defining class Game
 class Game {
-    Window *gameWin = nullptr;
+    std::shared_ptr<Window> gameWin = nullptr;
     std::shared_ptr<SDL_Texture> background = nullptr;
     Arena arr;
     bool isKeyPressed = false;
@@ -39,7 +39,7 @@ class Game {
     void stopGame(bool isMultiplayer) const;
 
 public:
-    Game(cMain *parent, Window *gameWin);
+    Game(cMain *parent, const std::shared_ptr<Window> &gameWin);
 
     ~Game();
 
