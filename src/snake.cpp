@@ -1,7 +1,9 @@
+#include <wx/wx.h>
+
 #include "entity.hpp"
 #include "sdl_window.hpp"
 
-#include <wx/wx.h>
+#include "game.hpp"
 
 // Definition of class "Entity"
 // which is the parent class for all entities snke, wall and food
@@ -18,9 +20,9 @@ Snake::Snake(Window *gameWin, Arena *arr, wxSlider *difficulty, const BodyColor 
     this->arr = arr;
     this->color = color;
     snake = std::vector<std::shared_ptr<GraphicItem> >(ROWS() * COLS());
-    eatSound = new Sound("sfx/boom.wav");
-    dieSound = new Sound("sfx/aaaugh.wav");
-    registeredDirs = new Dir[NUM_CHAINED_MOVES_ALLOWED];
+    eatSound = std::make_unique<Sound>("sfx/boom.wav");
+    dieSound = std::make_unique<Sound>("sfx/aaaugh.wav");
+    this->registeredDirs = std::make_shared<std::array<Dir, NUM_CHAINED_MOVES_ALLOWED> >();
     setInitialDir(right);
 
     const char *filePath;
@@ -33,7 +35,13 @@ Snake::Snake(Window *gameWin, Arena *arr, wxSlider *difficulty, const BodyColor 
 
         // display scores
         scoreTitle = "Arrows: ";
-        font = new Fonts(gameWin, scoreTitle + std::to_string(score), color, winWidth / 4 - 50, winHeight);
+        font = std::make_shared<Fonts>(
+            gameWin,
+            scoreTitle + std::to_string(score),
+            color,
+            winWidth / 4 - 50,
+            winHeight
+        );
     } else if (color == BLUE) {
         dir = left;
         filePath = "gfx/blue.png";
@@ -43,7 +51,13 @@ Snake::Snake(Window *gameWin, Arena *arr, wxSlider *difficulty, const BodyColor 
 
         // display scores
         scoreTitle = "WASD: ";
-        font = new Fonts(gameWin, scoreTitle + std::to_string(score), color, winWidth * 3 / 4 - 50, winHeight);
+        font = std::make_shared<Fonts>(
+            gameWin,
+            scoreTitle + std::to_string(score),
+            color,
+            winWidth * 3 / 4 - 50,
+            winHeight
+        );
     }
 
     this->difficulty = difficulty;
@@ -53,12 +67,8 @@ Snake::Snake(Window *gameWin, Arena *arr, wxSlider *difficulty, const BodyColor 
 void Snake::addToArr() const {
     for (int i = 0; i < length; i++) {
         const auto pos = snake[i]->getPos();
-        (*arr)[pos[0]][pos[1]] = snake[i];
+        (*arr)[pos->getX()][pos->getY()] = snake[i];
     }
-}
-
-Snake::~Snake() {
-    delete (font);
 }
 
 bool Snake::move() {
@@ -69,23 +79,23 @@ bool Snake::move() {
 
     // deleting the last square where the snake's tail was last in
     const auto pos = snake[length - 1]->getPos();
-    (*arr)[pos[0]][pos[1]] = nullptr;
+    (*arr)[pos->getX()][pos->getY()] = nullptr;
 
     // collision detection
     std::shared_ptr<GraphicItem> nextItem = nullptr;
     const auto pos1 = snake[0]->getPos();
     switch (dir) {
         case up:
-            nextItem = (*arr)[pos1[0]][pos1[1] - 1];
+            nextItem = (*arr)[pos1->getX()][pos1->getY() - 1];
             break;
         case down:
-            nextItem = (*arr)[pos1[0]][pos1[1] + 1];
+            nextItem = (*arr)[pos1->getX()][pos1->getY() + 1];
             break;
         case left:
-            nextItem = (*arr)[pos1[0] - 1][pos1[1]];
+            nextItem = (*arr)[pos1->getX() - 1][pos1->getY()];
             break;
         case right:
-            nextItem = (*arr)[pos1[0] + 1][pos1[1]];
+            nextItem = (*arr)[pos1->getX() + 1][pos1->getY()];
             break;
         default:
             nextItem = nullptr;
@@ -110,19 +120,19 @@ bool Snake::move() {
     const auto pos2 = snake[1]->getPos();
     switch (dir) {
         case up:
-            snake[0] = std::make_shared<GraphicItem>(texture, pos2[0], pos2[1] - 1, SNAKE);
+            snake[0] = std::make_shared<GraphicItem>(texture, pos2->getX(), pos2->getY() - 1, SNAKE);
             break;
         case down:
-            snake[0] = std::make_shared<GraphicItem>(texture, pos2[0], pos2[1] + 1, SNAKE);
+            snake[0] = std::make_shared<GraphicItem>(texture, pos2->getX(), pos2->getY() + 1, SNAKE);
             break;
         case left:
-            snake[0] = std::make_shared<GraphicItem>(texture, pos2[0] - 1, pos2[1], SNAKE);
+            snake[0] = std::make_shared<GraphicItem>(texture, pos2->getX() - 1, pos2->getY(), SNAKE);
             break;
         case right:
-            snake[0] = std::make_shared<GraphicItem>(texture, pos2[0] + 1, pos2[1], SNAKE);
+            snake[0] = std::make_shared<GraphicItem>(texture, pos2->getX() + 1, pos2->getY(), SNAKE);
             break;
         default:
-            snake[0] = std::make_shared<GraphicItem>(texture, pos2[0] + 1, pos2[1], SNAKE);
+            snake[0] = std::make_shared<GraphicItem>(texture, pos2->getX() + 1, pos2->getY(), SNAKE);
     }
 
     addToArr();
@@ -130,22 +140,21 @@ bool Snake::move() {
     return true;
 }
 
-bool Snake::move(Dir *dirs) {
-    delete (registeredDirs);
+bool Snake::move(const Moves &dirs) {
     registeredDirs = dirs;
     return move();
 }
 
 Dir Snake::getNextDir() const {
-    const Dir currentDir = registeredDirs[0];
+    const Dir currentDir = (*registeredDirs)[0];
 
     // removing second dir from the list
     for (int i = 1; i < NUM_CHAINED_MOVES_ALLOWED; i++) {
-        if (registeredDirs[i] != none) {
-            registeredDirs[i - 1] = registeredDirs[i];
+        if ((*registeredDirs)[i] != none) {
+            registeredDirs.get()[i - 1] = registeredDirs.get()[i];
         }
     }
-    registeredDirs[NUM_CHAINED_MOVES_ALLOWED] = none;
+    (*registeredDirs)[NUM_CHAINED_MOVES_ALLOWED - 1] = none;
 
     return currentDir;
 }
@@ -156,7 +165,7 @@ void Snake::ate(const std::shared_ptr<GraphicItem> &nextItem) {
 
     // delete the food item
     const auto nextPos = nextItem->getPos();
-    (*arr)[nextPos[0]][nextPos[1]]->rmFromParent();
+    (*arr)[nextPos->getX()][nextPos->getY()]->rmFromParent();
 
     // output the score
     font->setTitle(scoreTitle + std::to_string(score));
@@ -166,9 +175,9 @@ void Snake::ate(const std::shared_ptr<GraphicItem> &nextItem) {
 }
 
 void Snake::setInitialDir(const Dir pDir) const {
-    registeredDirs[0] = pDir;
+    (*registeredDirs)[0] = pDir;
     for (int i = 1; i < NUM_CHAINED_MOVES_ALLOWED; i++) {
-        registeredDirs[i] = none;
+        (*registeredDirs)[i] = none;
     }
 }
 

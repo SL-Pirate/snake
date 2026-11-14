@@ -12,6 +12,7 @@
 #include <memory>
 
 typedef std::vector<std::vector<std::shared_ptr<GraphicItem> > > Arena;
+typedef std::shared_ptr<std::array<Dir, NUM_CHAINED_MOVES_ALLOWED>> Moves;
 
 //parent class for all entities snake, wall and food
 class Entity {
@@ -61,21 +62,19 @@ class Snake : public Entity {
     std::vector<std::shared_ptr<GraphicItem> > snake;
     int length = 0;
     Dir dir = right;
-    Dir *registeredDirs;
+    Moves registeredDirs;
     int score = 0;
     wxSlider *difficulty = nullptr;
     std::string scoreTitle;
-    Sound *eatSound;
-    Sound *dieSound;
+    std::unique_ptr<Sound> eatSound;
+    std::unique_ptr<Sound> dieSound;
 
-    void ate(const std::shared_ptr<GraphicItem>& nextItem);
+    void ate(const std::shared_ptr<GraphicItem> &nextItem);
 
     [[nodiscard]] Dir getNextDir() const;
 
 public:
     Snake(Window *gameWin, Arena *arr, wxSlider *difficulty, BodyColor color);
-
-    ~Snake() override;
 
     void clearItem() override;
 
@@ -83,7 +82,7 @@ public:
 
     bool move();
 
-    bool move(Dir *dirs);
+    bool move(const Moves &dirs);
 
     void setInitialDir(Dir pDir) const;
 
@@ -91,7 +90,7 @@ public:
 
     void applyPenalty(double penaltyPerCent);
 
-    Fonts *font = nullptr;
+    std::shared_ptr<Fonts> font = nullptr;
     BodyColor color;
 };
 
@@ -116,4 +115,15 @@ public:
     void genFood();
 
     void clearItem() override;
+};
+
+class Pos {
+    int x;
+    int y;
+
+public:
+    Pos(int x, int y);
+
+    [[nodiscard]] int getX() const;
+    [[nodiscard]] int getY() const;
 };

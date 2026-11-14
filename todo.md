@@ -10,12 +10,12 @@ In order of implementation.
     - Note: `src/main.cpp:158` deletes a snake from outside `Game`. Decide the owner first.
     - Note: `arr` must stay declared before the entities in `Game` (members are destroyed in reverse order).
 
-- [ ] **2. `Snake` members**: `font`, `eatSound`, `dieSound`
+- [x] **2. `Snake` members**: `font`, `eatSound`, `dieSound`
     - Where: `src/snake.cpp:21-22`, `:36`, `:46`
     - Convert to: `std::unique_ptr`, or plain members
     - Fixes: `eatSound` and `dieSound` are never deleted (leak).
 
-- [ ] **3. Direction arrays**: `registeredDirs` in `Snake`, `dirs` in `Game`
+- [x] **3. Direction arrays**: `registeredDirs` in `Snake`, `dirs` in `Game`
     - Where: `src/snake.cpp:23`, `src/game.cpp:370`
     - Convert to: `std::array` or `std::vector<Dir>`
     - Fixes: `src/snake.cpp:134` uses `delete` on an array (needs `delete[]`).

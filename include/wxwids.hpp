@@ -20,7 +20,7 @@ public:
 
     void quit();
 
-    void quit(double penaltyPerCentForGameQuitOnMultiPlayer, const BodyColor *snake);
+    void quit(double penaltyPerCentForGameQuitOnMultiPlayer, const std::shared_ptr<BodyColor> &snake);
 
 private:
     Game *game = nullptr;

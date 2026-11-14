@@ -138,7 +138,7 @@ void cMain::quit() {
 }
 
 // for multiplayer mode
-void cMain::quit(double penaltyPerCentForGameQuitOnMultiPlayer, const BodyColor *snake) {
+void cMain::quit(double penaltyPerCentForGameQuitOnMultiPlayer, const std::shared_ptr<BodyColor> &snake) {
     outLabel = "Game Over\nRED's Score: ";
     outLabel << game->snake1->getScore();
     outLabel << "\nBLUE's Score: ";
@@ -155,8 +155,6 @@ void cMain::quit(double penaltyPerCentForGameQuitOnMultiPlayer, const BodyColor 
         }
         outLabel << "\n"
                 << penaltyPerCentForGameQuitOnMultiPlayer << "% penalty applied for " << snake_color;
-        delete (snake);
-        snake = nullptr;
     }
     btn2->SetLabel("Restart Multiplayer\n(Chaotic Mode)");
 

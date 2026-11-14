@@ -24,13 +24,13 @@ class Game {
     std::unique_ptr<Wall> wall = nullptr;
     cMain *parent = nullptr;
     int penaltyPerCentForGameQuitOnMultiPlayer = 10;
-    BodyColor *culpritSnake = nullptr;
+    std::shared_ptr<BodyColor> culpritSnake = nullptr;
 
-    static void setDir(Dir currentDir, Dir *dirs);
+    static void setDir(Dir currentDir, const Moves &dirs);
 
-    static void setDir(Dir currentDir, Dir *dirs, bool *snake_moved);
+    static void setDir(Dir currentDir, const Moves &dirs, const std::shared_ptr<bool> &snake_moved);
 
-    static Dir *resetDirs();
+    static Moves resetDirs();
 
     void singlePlayerEventHandler(wxTimerEvent &event);
 

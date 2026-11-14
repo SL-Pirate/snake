@@ -48,7 +48,6 @@ GraphicItem::GraphicItem(SDL_Texture *texture, SDL_Rect *dst) : x(0), y(0), id()
 }
 
 GraphicItem::~GraphicItem() {
-    delete (pos);
     delete (org);
 }
 
@@ -57,11 +56,8 @@ void GraphicItem::setPos(const int pX, const int pY) {
     this->y = pY * dst->h;
 }
 
-int *GraphicItem::getPos() {
-    delete pos;
-    pos = new int[2];
-    pos[0] = x / dst->w;
-    pos[1] = y / dst->h;
+std::shared_ptr<Pos> GraphicItem::getPos() {
+    pos = std::make_shared<Pos>(x / dst->w, y / dst->h);
     return pos;
 }
 

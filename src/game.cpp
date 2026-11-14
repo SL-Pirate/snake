@@ -28,7 +28,6 @@ Game::Game(cMain *parent, Window *gameWin) {
 
 void Game::startSingleplayer() {
     background = gameWin->loadTexture(openRes("gfx/grass-pattern.png")); // res/gfx/grass-pattern.png
-    // foods = new Food *[NUM_FOOD_ITEMS_SINGLE_PLAYER];
     foodContainer = std::make_unique<FoodContainer>(NUM_FOOD_ITEMS_SINGLE_PLAYER);
 
     // arr[ROWS()][COLS()]
@@ -49,7 +48,6 @@ void Game::startSingleplayer() {
     // implementing snake & food
     snake = std::make_unique<Snake>(gameWin, &arr, parent->difficulty /*1000/parent->difficulty->GetValue()*/, RED);
     for (int i = 0; i < NUM_FOOD_ITEMS_SINGLE_PLAYER; i++) {
-        // foodContainer.get()[i] = new Food(gameWin, &arr);
         (*foodContainer)[i] = std::make_unique<Food>(gameWin, &arr);
     }
 
@@ -58,7 +56,7 @@ void Game::startSingleplayer() {
 }
 
 void Game::singlePlayerEventHandler(wxTimerEvent &) {
-    Dir *dirs = resetDirs();
+    Moves dirs = resetDirs();
     SDL_Event evnt;
     while (SDL_PollEvent(&evnt)) {
         if (evnt.type == SDL_QUIT) {
@@ -165,11 +163,11 @@ void Game::startMultiplayer() {
 }
 
 void Game::multiPlayerEventHandler(wxTimerEvent &event) {
-    Dir *dir1 = resetDirs();
-    Dir *dir2 = resetDirs();
+    Moves dir1 = resetDirs();
+    Moves dir2 = resetDirs();
 
-    const auto snake1_moved = new bool(false);
-    const auto snake2_moved = new bool(false);
+    const auto snake1_moved = std::make_shared<bool>(false);
+    const auto snake2_moved = std::make_shared<bool>(false);
     SDL_Event evnt;
 
     while (SDL_PollEvent(&evnt)) {
@@ -243,12 +241,12 @@ void Game::multiPlayerEventHandler(wxTimerEvent &event) {
     } else {
         if (!snake1->move()) {
             snake1->applyPenalty(penaltyPerCentForGameQuitOnMultiPlayer);
-            culpritSnake = new BodyColor(snake1->color);
+            culpritSnake = std::make_shared<BodyColor>(snake1->color);
             canKeepGoing = false;
         }
         if (!snake2->move()) {
             snake2->applyPenalty(penaltyPerCentForGameQuitOnMultiPlayer);
-            culpritSnake = new BodyColor(snake2->color);
+            culpritSnake = std::make_shared<BodyColor>(snake2->color);
             canKeepGoing = false;
         }
     }
@@ -323,35 +321,35 @@ void Game::resume() {
     isKeyPressed = false;
 }
 
-void Game::setDir(const Dir currentDir, Dir *dirs) {
+void Game::setDir(const Dir currentDir, const Moves &dirs) {
     for (int i = 0; i <= NUM_CHAINED_MOVES_ALLOWED; i++) {
-        if (dirs[i] != none) {
+        if ((*dirs)[i] != none) {
             continue;
-        } else {
-            dirs[i] = currentDir;
-            break;
         }
+
+        (*dirs)[i] = currentDir;
+        break;
     }
 }
 
-void Game::setDir(const Dir currentDir, Dir *dirs, bool *snake_moved) {
+void Game::setDir(const Dir currentDir, const Moves &dirs, const std::shared_ptr<bool> &snake_moved) {
     for (int i = 0; i <= NUM_CHAINED_MOVES_ALLOWED; i++) {
-        if (dirs[i] != none) {
+        if ((*dirs)[i] != none) {
             continue;
-        } else {
-            dirs[i] = currentDir;
-            break;
         }
+
+        (*dirs)[i] = currentDir;
+        break;
     }
 
     *snake_moved = true;
 }
 
-Dir *Game::resetDirs() {
+Moves Game::resetDirs() {
     // setting chained inputs (directions) to none
-    const auto dirs = new Dir[NUM_CHAINED_MOVES_ALLOWED];
+    auto dirs = std::make_shared<std::array<Dir, NUM_CHAINED_MOVES_ALLOWED> >();
     for (int i = 0; i < NUM_CHAINED_MOVES_ALLOWED; i++) {
-        dirs[i] = none;
+        (*dirs)[i] = none;
     }
 
     return dirs;

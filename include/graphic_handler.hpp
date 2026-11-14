@@ -1,10 +1,12 @@
 #pragma once
+#include <memory>
 
 class Entity;
+class Pos;
 
 class GraphicItem {
     int x, y;
-    int *pos = nullptr;
+    std::shared_ptr<Pos> pos = nullptr;
     Entity *parent = nullptr;
 
 public:
@@ -39,7 +41,7 @@ public:
     Therefore no if total in game units can be calculated by total screen width (in pixels)
     divided by size of the graphic item
     */
-    int *getPos();
+    std::shared_ptr<Pos> getPos();
 
     //remove the item from the parent class by setting it to null
     void rmFromParent() const;
