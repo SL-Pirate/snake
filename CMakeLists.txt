@@ -13,6 +13,7 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_mixer REQUIRED)
+find_package(enet REQUIRED)
 
 add_executable(snake ${SOURCES})
 
@@ -27,6 +28,7 @@ target_link_libraries(snake PRIVATE
         SDL2_mixer::SDL2_mixer
         wxWidgets::wxWidgets
         snake_res
+        enet::enet
 )
 
 if (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")

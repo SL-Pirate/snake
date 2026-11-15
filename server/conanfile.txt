@@ -1,0 +1,9 @@
+[requires]
+enet/1.3.18
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[layout]
+cmake_layout

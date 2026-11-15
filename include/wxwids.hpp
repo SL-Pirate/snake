@@ -7,6 +7,12 @@
 
 class Game;
 
+enum GameMode {
+    SINGLE_PLAYER,
+    CHAOTIC,
+    MULTIPLAYER
+};
+
 class cMain : public wxFrame {
 public:
     cMain();
@@ -23,19 +29,33 @@ public:
 private:
     std::unique_ptr<Game> game = nullptr;
     std::shared_ptr<Window> gameWin = nullptr;
-    wxButton *btn = nullptr;
-    wxButton *btn1 = nullptr;
-    wxButton *btn2 = nullptr;
+    wxButton *singlePlayerButton = nullptr;
+    wxButton *resumeButton = nullptr;
+    wxButton *chaoticModeButton = nullptr;
+    wxButton *onlineMultiplayerButton = nullptr;
+    wxFrame *multiplayerRoom = nullptr;
+    wxStaticText *roomCode = nullptr;
+    wxButton *multiplayerRoomStartButton = nullptr;
+    wxButton *createRoomButton = nullptr;
+    wxButton *joinRoomButton = nullptr;
+    wxListBox *playerList = nullptr;
     wxStaticText *out = nullptr;
     wxStaticText *in = nullptr;
     wxString outLabel = "\n\n\tScore goes here";
-    static bool multiplayer;
+    wxString roomCodeLabel = "Room Code: ----";
+    wxTextCtrl *yourName = nullptr;
+    wxTextCtrl *roomCodeInput = nullptr;
+    GameMode gameMode = SINGLE_PLAYER;
 
     void startInternal();
 
     void startSinglePlayer(wxCommandEvent &evt);
 
-    void startMultiplayer(wxCommandEvent &evt);
+    void startChaotic(wxCommandEvent &evt);
+
+    void startOnlineMultiplayer(wxCommandEvent &evt);
+
+    void showConnectionWindow(wxCommandEvent &evt);
 
     void onClose(wxCloseEvent &evt);
 
@@ -43,7 +63,6 @@ private:
 
     wxDECLARE_EVENT_TABLE();
 };
-
 
 class cApp : public wxApp {
 public:

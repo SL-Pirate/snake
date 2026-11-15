@@ -45,7 +45,9 @@ public:
 
     void startSingleplayer();
 
-    void startMultiplayer();
+    void startChaotic();
+
+    void startMultiPlayer();
 
     void resume();
 

@@ -55,6 +55,10 @@ void Game::startSingleplayer() {
     parent->m_timer.Start(1000 / parent->difficulty->GetValue());
 }
 
+void Game::startMultiPlayer() {
+
+}
+
 void Game::singlePlayerEventHandler(wxTimerEvent &) {
     Moves dirs = resetDirs();
     SDL_Event evnt;
@@ -131,7 +135,7 @@ void Game::singlePlayerEventHandler(wxTimerEvent &) {
     gameWin->display();
 }
 
-void Game::startMultiplayer() {
+void Game::startChaotic() {
     background = gameWin->loadTexture(openRes("gfx/grass-pattern.png")); // res/gfx/grass-pattern.png
     foodContainer = std::make_unique<FoodContainer>(NUM_FOOD_ITEMS_MULTIPLAYER);
 
