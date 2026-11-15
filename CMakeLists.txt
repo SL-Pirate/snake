@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(Snake)
@@ -14,6 +16,7 @@ find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 find_package(enet REQUIRED)
+find_package(glaze REQUIRED)
 
 add_executable(snake ${SOURCES})
 
@@ -27,8 +30,9 @@ target_link_libraries(snake PRIVATE
         sdl_ttf::sdl_ttf
         SDL2_mixer::SDL2_mixer
         wxWidgets::wxWidgets
-        snake_res
         enet::enet
+        glaze::glaze
+        snake_res
 )
 
 if (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")

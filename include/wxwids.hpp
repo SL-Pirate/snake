@@ -1,17 +1,12 @@
 #pragma once
 
+#include <enet/enet.h>
 #include <wx/wx.h>
 
 #include "main.hpp"
 #include "sdl_window.hpp"
 
 class Game;
-
-enum GameMode {
-    SINGLE_PLAYER,
-    CHAOTIC,
-    MULTIPLAYER
-};
 
 class cMain : public wxFrame {
 public:
@@ -45,7 +40,6 @@ private:
     wxString roomCodeLabel = "Room Code: ----";
     wxTextCtrl *yourName = nullptr;
     wxTextCtrl *roomCodeInput = nullptr;
-    GameMode gameMode = SINGLE_PLAYER;
 
     void startInternal();
 
@@ -54,6 +48,8 @@ private:
     void startChaotic(wxCommandEvent &evt);
 
     void startOnlineMultiplayer(wxCommandEvent &evt);
+
+    void joinOnlineMultiplayer(wxCommandEvent &evt);
 
     void showConnectionWindow(wxCommandEvent &evt);
 

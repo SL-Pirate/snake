@@ -2,6 +2,7 @@
 
 #include "entity.hpp"
 #include "main.hpp"
+#include "network.hpp"
 #include "wxwids.hpp"
 #include "sdl_window.hpp"
 
@@ -12,6 +13,12 @@ class Snake;
 class Food;
 
 typedef std::vector<std::unique_ptr<Food> > FoodContainer;
+
+enum GameMode {
+    SINGLE_PLAYER,
+    CHAOTIC,
+    MULTIPLAYER
+};
 
 // defining class Game
 class Game {
@@ -54,4 +61,6 @@ public:
     std::unique_ptr<Snake> snake = nullptr;
     std::unique_ptr<Snake> snake1 = nullptr;
     std::unique_ptr<Snake> snake2 = nullptr;
+    Network network = Network();
+    GameMode gameMode = SINGLE_PLAYER;
 };
