@@ -1,5 +1,6 @@
 #include "network.hpp"
 #include <glaze/glaze.hpp>
+#include <utility>
 
 bool Network::initialize() {
     if (enet_initialize() != 0) {
@@ -44,28 +45,33 @@ bool Network::connectToServer() {
     return false;
 }
 
-void Network::send_packet(NetworkPacket data) const {
+template<typename T>
+void Network::sendPacket(NetworkPacket<T> data) const {
     const std::string json = glz::write_json(data).value_or("null");
     const auto packet = std::unique_ptr<ENetPacket>(
-        enet_packet_create(json.c_str(), json.size(), ENET_PACKET_FLAG_RELIABLE));
+        enet_packet_create(json.data(), json.size(), ENET_PACKET_FLAG_RELIABLE));
     enet_peer_send(server.get(), 0, packet.get());
     enet_host_flush(client.get());
 }
 
-bool Network::connectToSession(std::string roomId) const {
-    const auto data = NetworkPacket{.type = JOIN_ROOM, .data = std::optional{roomId}};
-    send_packet(data);
+bool Network::connectToSession(std::string roomId, std::string name) const {
+    const auto data = NetworkPacket{
+        .type = JOIN_ROOM, .data = std::optional{ConnectSessionData{std::move(roomId), std::move(name)}}
+    };
+    sendPacket(data);
 
-    std::optional<NetworkPacket> value = readPacket(RESPONSE_TIMEOUT);
-    return value.transform([](const NetworkPacket &packet) { return packet.data == "OK"; }).value_or(false);
+    std::optional<NetworkPacket<std::string> > value = readPacket<std::string>(RESPONSE_TIMEOUT);
+    return value.transform([](const NetworkPacket<std::string> &packet) {
+        return packet.data == "OK";
+    }).value_or(false);
 }
 
 std::optional<std::string> Network::createSession() const {
-    const auto data = NetworkPacket{.type = CREATE_ROOM, .data = std::nullopt};
-    send_packet(data);
+    const auto data = NetworkPacket<std::string>{.type = CREATE_ROOM, .data = std::nullopt};
+    sendPacket(data);
 
-    std::optional<NetworkPacket> value = readPacket(RESPONSE_TIMEOUT);
-    return value.transform([](const NetworkPacket &packet) { return packet.data; }).value_or(std::nullopt);
+    std::optional<NetworkPacket<std::string> > value = readPacket<std::string>(RESPONSE_TIMEOUT);
+    return value.transform([](const NetworkPacket<std::string> &packet) { return packet.data; }).value_or(std::nullopt);
 }
 
 void Network::disconnectFromSession() const {
@@ -93,11 +99,12 @@ void Network::disconnectFromSession() const {
     enet_peer_reset(server.get());
 }
 
-std::optional<NetworkPacket> Network::readPacket(const long timeout) const {
+template<typename T>
+std::optional<NetworkPacket<T> > Network::readPacket(const long timeout) const {
     if (enet_host_service(client.get(), event.get(), timeout) > 0) {
         if (event->type == ENET_EVENT_TYPE_RECEIVE) {
             std::string_view data(reinterpret_cast<const char *>(event->packet->data), event->packet->dataLength);
-            auto packet = NetworkPacket{};
+            auto packet = NetworkPacket<T>{};
             if (glz::read<netOpts>(packet, data)) {
                 return std::nullopt;
             }
@@ -108,4 +115,15 @@ std::optional<NetworkPacket> Network::readPacket(const long timeout) const {
     }
 
     return std::nullopt;
+}
+
+std::vector<std::string> Network::discoverPlayers() const {
+    if (!isInitialized) return std::vector<std::string>{};
+
+    std::vector<std::string> players;
+
+    sendPacket(NetworkPacket<std::string>{POLL_PLAYERS});
+    auto packet = readPacket<std::vector<std::string> >(0);
+    if (!packet || packet->data->empty()) return {};
+    return std::move(packet->data).value();
 }

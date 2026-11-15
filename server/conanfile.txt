@@ -1,5 +1,6 @@
 [requires]
 enet/1.3.18
+glaze/9.1.0
 
 [generators]
 CMakeDeps

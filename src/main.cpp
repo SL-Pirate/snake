@@ -15,7 +15,6 @@
 int main(int argc, char **argv) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         throw SDL_InitError();
-        return -1;
     }
 
     return wxEntry(argc, argv);
@@ -25,8 +24,8 @@ wxBEGIN_EVENT_TABLE(cMain, wxFrame)
     EVT_BUTTON(1010, cMain::startSinglePlayer)
     EVT_BUTTON(1011, cMain::startChaotic)
     EVT_BUTTON(1013, cMain::showConnectionWindow)
-    EVT_BUTTON(1016, cMain::startOnlineMultiplayer)
-    EVT_BUTTON(1015, cMain::joinOnlineMultiplayer)
+    EVT_BUTTON(1015, cMain::startOnlineMultiplayer)
+    EVT_BUTTON(1016, cMain::joinOnlineMultiplayer)
     EVT_BUTTON(1012, cMain::resume)
     EVT_CLOSE(cMain::onClose)
 wxEND_EVENT_TABLE();
@@ -49,8 +48,13 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Snake " VERSION, wxPoint(250, 50), 
     );
     difficulty = new wxSlider(this, 1009, 10, 1, 20, wxPoint(50, 100), wxSize(300, 50));
     singlePlayerButton = new wxButton(this, 1010, "Start Singleplayer", wxPoint(33, 170), wxSize(150, 50));
-    chaoticModeButton = new wxButton(this, 1011, "Start Multiplayer\n(Chaotic Mode)", wxPoint(217, 170),
-                                     wxSize(150, 70));
+    chaoticModeButton = new wxButton(
+        this,
+        1011,
+        "Start Multiplayer\n(Chaotic Mode)",
+        wxPoint(217, 170),
+        wxSize(150, 70)
+    );
     onlineMultiplayerButton = new wxButton(this, 1013, "Start Online Multiplayer", wxPoint(120, 270), wxSize(160, 50));
     resumeButton = new wxButton(this, 1012, "Resume", wxPoint(150, 220), wxSize(100, 50));
     resumeButton->Hide();
@@ -58,8 +62,14 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Snake " VERSION, wxPoint(250, 50), 
     out->Hide();
 
     // connection frame for multiplayer
-    multiplayerRoom = new wxFrame(this, wxID_ANY, "Waiting for Players", wxDefaultPosition, wxSize(400, 440),
-                                  wxDEFAULT_FRAME_STYLE | wxFRAME_FLOAT_ON_PARENT);
+    multiplayerRoom = new wxFrame(
+        this,
+        wxID_ANY,
+        "Waiting for Players",
+        wxDefaultPosition,
+        wxSize(400, 440),
+        wxDEFAULT_FRAME_STYLE | wxFRAME_FLOAT_ON_PARENT
+    );
 #ifdef _WIN32
     multiplayerRoom->SetBackgroundColour(*wxWHITE);
 #endif
@@ -85,6 +95,11 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Snake " VERSION, wxPoint(250, 50), 
     multiplayerRoomStartButton->Disable();
     // default close destroys the frame and leaves multiplayerRoom dangling
     multiplayerRoom->Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent &) { multiplayerRoom->Hide(); });
+    multiplayerRoom->Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent &evt) {
+        m_player_discover.Stop();
+        evt.Skip();
+    });
+    multiplayerRoom->Bind(wxEVT_TIMER, &cMain::discoverPlayers, this, m_player_discover.GetId());
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
@@ -92,6 +107,7 @@ void cMain::showConnectionWindow(wxCommandEvent &) {
     multiplayerRoom->CenterOnParent();
     multiplayerRoom->Show();
     multiplayerRoom->Raise();
+    m_player_discover.Start(2500);
 }
 
 void cMain::startInternal() {
@@ -152,11 +168,18 @@ void cMain::joinOnlineMultiplayer(wxCommandEvent &) {
     }
 
     const std::string sessionId = roomCodeInput->GetValue().Trim().Trim(false).ToStdString();
+    const auto name = yourName->GetValue().Trim().Trim(false).ToStdString();
     if (sessionId.empty()) {
-        roomCode->SetLabel("Please enter the session id or start a session");
+        out->SetLabel("Please enter the session id or start a session");
+        out->Show();
         return;
     }
-    if (game->network.connectToSession(sessionId)) {
+    if (name.empty()) {
+        out->SetLabel("Please enter the name of the room");
+        out->Show();
+        return;
+    }
+    if (game->network.connectToSession(sessionId, name)) {
         out->SetLabel("Could not connect to server");
         out->Show();
         return;
@@ -273,6 +296,12 @@ void cMain::quit(const double penaltyPerCentForGameQuitOnMultiPlayer, const std:
     onlineMultiplayerButton->Show();
     this->Show();
     gameWin->hide();
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst
+void cMain::discoverPlayers(wxTimerEvent &) {
+    auto const players = this->game->network.discoverPlayers();
+    playerList->Set(players);
 }
 
 // Starting point of the program

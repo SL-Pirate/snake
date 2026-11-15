@@ -14,12 +14,15 @@ public:
 
     wxSlider *difficulty = nullptr;
     wxTimer m_timer;
+    wxTimer m_player_discover;
 
     void pause();
 
     void quit();
 
     void quit(double penaltyPerCentForGameQuitOnMultiPlayer, const std::shared_ptr<BodyColor> &snake);
+
+    void discoverPlayers(wxTimerEvent &evt);
 
 private:
     std::unique_ptr<Game> game = nullptr;

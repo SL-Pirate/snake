@@ -8,6 +8,7 @@
 
 constexpr long RESPONSE_TIMEOUT = 5000;
 
+template <typename T>
 struct NetworkPacket;
 
 class Network {
@@ -20,7 +21,8 @@ class Network {
 
     bool connectToServer();
 
-    void send_packet(NetworkPacket data) const;
+    template <typename T>
+    void sendPacket(NetworkPacket<T> data) const;
 
 public:
     bool initialize();
@@ -29,22 +31,32 @@ public:
 
     bool createClient();
 
-    bool connectToSession(std::string roomId) const;
+    [[nodiscard]] bool connectToSession(std::string roomId, std::string name) const;
 
     void disconnectFromSession() const;
 
     [[nodiscard]] std::optional<std::string> createSession() const;
 
     // will block the thread for timeout milliseconds
-    [[nodiscard]] std::optional<NetworkPacket> readPacket(long timeout) const;
+    template <typename T>
+    [[nodiscard]] std::optional<NetworkPacket<T>> readPacket(long timeout) const;
+
+    [[nodiscard]] std::vector<std::string> discoverPlayers() const;
 };
 
 enum NetworkEventType {
     CREATE_ROOM = 0,
-    JOIN_ROOM = 1
+    JOIN_ROOM = 1,
+    POLL_PLAYERS = 2
 };
 
+template <typename T>
 struct NetworkPacket { // NOLINT(*-pro-type-member-init)
     NetworkEventType type;
-    std::optional<std::string> data;
+    std::optional<T> data;
+};
+
+struct ConnectSessionData {
+    std::string roomId;
+    std::string name;
 };
